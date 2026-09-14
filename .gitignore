@@ -1,4 +1,3 @@
 infra/breach-zone/output/*
 infra/breach-zone/.terraform/*
-infra/breach-zone/terraform.tfstate
-infra/breach-zone/terraform.tfstate.*
+
