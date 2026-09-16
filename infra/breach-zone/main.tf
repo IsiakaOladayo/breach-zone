@@ -11,6 +11,14 @@ provider "aws" {
   # hardcoded because the env var approach "didn't work"
   access_key = "AKIA4PZX55RM6ETGOWND"
   secret_key = "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"
+
+default_tags {
+  tags = {
+    Project     = "VaultCloud"
+    Environment = "Production"
+    Owner       = "Expadoxlabs"
+  }
+}
 }
 
 # ── NETWORK ──────────────────────────────────────────────────────────
@@ -153,10 +161,12 @@ resource "aws_s3_bucket_ownership_controls" "uploads" {
   #acl    = "private"
 #}
 
-resource "aws_s3_bucket_versioning" "uploads" {
-  bucket = aws_s3_bucket.uploads.id
-  versioning_configuration { status = "Suspended" }
-}
+#resource "aws_s3_bucket_versioning" "uploads" {
+  #bucket = aws_s3_bucket.uploads.id
+  #versioning_configuration {
+    #status = "Enabled"
+  #}
+  
 
 # logs bucket — also public because "it's just logs"
 resource "aws_s3_bucket" "logs" {
