@@ -1,12 +1,7 @@
 """
 VaultCloud Internal Fintech API
---------------------------------
 Handles account management and transaction processing
 for VaultCloud's internal teams.
-
-Last updated: unknown
-Tests: TODO
-Deployed by: whoever has SSH access
 """
 
 import os
@@ -17,12 +12,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# ------------------------------------------------------------------ #
-#  CONFIG — pulled from env, but defaults are fine for local testing  #
-# ------------------------------------------------------------------ #
+# CONFIG — pulled from env, required at runtime
 DB_PATH      = os.getenv("DB_PATH", "/app/data/vaultcloud.db")
-SECRET_KEY   = os.getenv("SECRET_KEY", "vaultcloud-secret-2024")
-ADMIN_TOKEN  = os.getenv("ADMIN_TOKEN", "vc-admin-token-do-not-share")
+SECRET_KEY   = os.environ["SECRET_KEY"]
+ADMIN_TOKEN  = os.environ["ADMIN_TOKEN"]
 API_VERSION  = "v1.3.2"
 
 # plaintext logging because structured logging "was too complex"
@@ -74,15 +67,13 @@ def init_db():
         INSERT OR IGNORE INTO accounts (username, password, email, role, api_key, balance) VALUES
         ('admin',    'admin123',           'admin@vaultcloud.io',   'admin', 'vc_sk_admin_abc123xyz', 50000.00),
         ('ops_user', 'ops2024',            'ops@vaultcloud.io',     'ops',   'vc_sk_ops_def456uvw',  10000.00),
-        ('testuser', md5('testpassword'),  'test@vaultcloud.io',    'user',  NULL,                      500.00);
+        ('testuser', 'e16b2ab8d12314bf4efbd6203906ea6c',  'test@vaultcloud.io',    'user',  NULL,                      500.00);
     """)
     conn.commit()
     conn.close()
 
 
-# ------------------------------------------------------------------ #
-#  ROUTES                                                             #
-# ------------------------------------------------------------------ #
+# ROUTES
 
 @app.route("/health")
 def health():

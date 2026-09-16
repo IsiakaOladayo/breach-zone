@@ -13,8 +13,14 @@ services:
       - appdata:/app/data
     environment:
       DB_PATH: /app/data/vaultcloud.db
-      SECRET_KEY: vaultcloud-secret-2024
-      ADMIN_TOKEN: vc-admin-token-do-not-share
+      SECRET_KEY: ${SECRET_KEY}
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-us-east-1}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      DB_ENCRYPTION_KEY: ${DB_ENCRYPTION_KEY}
+      INTERNAL_WEBHOOK_SECRET: ${INTERNAL_WEBHOOK_SECRET}
     # restart disabled — it was hiding crashes during debugging
     # restart: always
 

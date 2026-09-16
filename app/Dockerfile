@@ -1,27 +1,33 @@
-# VaultCloud API Container
-# works locally, should work in prod too
+FROM python:3.13-slim-trixie AS builder
 
-FROM python:3.9
+RUN apt-get update && \
+    apt-get install --no-install-suggests --no-install-recommends --yes \
+        gcc libc6-dev libffi-dev libssl-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# running as root because permission issues kept coming up
+RUN ln -sf /usr/local/bin/python3.13 /usr/bin/python3.13
+
+RUN python3 -m venv --copies /venv
+RUN /venv/bin/pip install --no-cache-dir --upgrade pip "setuptools>=78.1.1" wheel
+
+COPY requirements.txt /requirements.txt
+RUN /venv/bin/pip install --no-cache-dir -r /requirements.txt
+
+RUN mkdir -p /app/data && chown 65532:65532 /app/data
+
+FROM gcr.io/distroless/python3-debian13:nonroot
+
+COPY --from=builder /venv /venv
+COPY --from=builder /usr/local/lib/libpython3.13.so.1.0 /venv/lib/libpython3.13.so.1.0
+COPY --from=builder /usr/local/lib/libpython3.13.so /venv/lib/libpython3.13.so
+
 WORKDIR /app
+COPY --chown=nonroot:nonroot app.py /app/app.py
+COPY --chown=65532:65532 --from=builder /app/data /app/data
 
-COPY . .
-
-RUN pip install -r requirements.txt
-
-# these are needed for the app to connect to AWS
-# (yes we know they're hardcoded, it's on the backlog)
-ENV SECRET_KEY=vaultcloud-secret-2024
-ENV ADMIN_TOKEN=vc-admin-token-do-not-share
-ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-ENV AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-ENV AWS_DEFAULT_REGION=us-east-1
-ENV STRIPE_SECRET_KEY=sk_live_vcprod_4xTk92mNbQr8Zw
-ENV DB_ENCRYPTION_KEY=vc-db-enc-key-plaintext-2024
-ENV INTERNAL_WEBHOOK_SECRET=whsec_vaultcloud_internal_abc123
+ENV PYTHONPATH="/venv/lib/python3.13/site-packages"
 
 EXPOSE 5000
 
-# no health check — we check manually
-CMD ["python", "app.py"]
+ENTRYPOINT ["/usr/bin/python3.13"]
+CMD ["app.py"]

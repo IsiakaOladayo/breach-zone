@@ -1,0 +1,45 @@
+name: Trivy Security Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  trivy-scan:
+    name: Container Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build container image
+        run: docker build --network host -t vaultcloud/api:latest ./app
+
+      - name: Run Trivy vulnerability scanner (CRITICAL + HIGH)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: vaultcloud/api:latest
+          severity: CRITICAL,HIGH
+          exit-code: 1
+          ignorefile: ./app/.trivyignore
+          format: table
+
+      - name: Run Trivy scanner (CRITICAL only — deployment gate)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: vaultcloud/api:latest
+          severity: CRITICAL
+          exit-code: 1
+          format: table
+
+      - name: Run Trivy filesystem scan (app dependencies)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: ./app
+          severity: CRITICAL,HIGH
+          exit-code: 1
+          ignorefile: ./app/.trivyignore
+          format: table

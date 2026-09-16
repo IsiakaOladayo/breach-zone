@@ -1,0 +1,9 @@
+.git
+.github
+*.md
+.aws_
+credentials QLabs.json
+__pycache__
+*.pyc
+.gitignore
+.env

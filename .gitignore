@@ -1,3 +1,28 @@
+vaultcloud security project.md
+credentials QLabs.json
+.aws_vaultcloud_breachzone_project_scope_vulnearability_management_plan.md
+
+vulnerability-management/before-after-tracking.md
+vulnerability-management/container-scan-baseline.txt
+vulnerability-management/deliverable4.sh
+vulnerability-management/results/fs-*.txt
+vulnerability-management/results/scan-20260916_041453.txt
+vulnerability-management/results/scan-20260916_073905.txt
+vulnerability-management/results/scan-20260916_075918.txt
+vulnerability-management/results/scan-20260916_093758.txt
+vulnerability-management/results/scan-20260916_141747.txt
+vulnerability-management/results/scan-20260916_145020.txt
+
 infra/breach-zone/output/*
 infra/breach-zone/.terraform/*
 
+docker-compose.override.yml
+*.tfstate
+*.tfstate.backup
+.terraform/
+__pycache__/
+*.pyc
+.env
+.vscode/
+.idea/
+.DS_Store
