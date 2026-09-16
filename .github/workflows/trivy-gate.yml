@@ -18,7 +18,7 @@ jobs:
         run: docker build --network host -t vaultcloud/api:latest ./app
 
       - name: Run Trivy vulnerability scanner (CRITICAL + HIGH)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.29.0
         with:
           image-ref: vaultcloud/api:latest
           severity: CRITICAL,HIGH
@@ -27,7 +27,7 @@ jobs:
           format: table
 
       - name: Run Trivy scanner (CRITICAL only — deployment gate)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.29.0
         with:
           image-ref: vaultcloud/api:latest
           severity: CRITICAL
@@ -35,7 +35,7 @@ jobs:
           format: table
 
       - name: Run Trivy filesystem scan (app dependencies)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.29.0
         with:
           scan-type: fs
           scan-ref: ./app
