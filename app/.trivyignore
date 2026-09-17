@@ -1,42 +1,25 @@
-# VaultCloud — Trivy Accepted Risk File
-# These CVEs are in the Debian OS layer of the distroless base image
-# (gcr.io/distroless/python3-debian13:nonroot). They are NOT reachable
-# by VaultCloud application code. Fixes depend on upstream Google/Debian
-# security updates to the base image.
-#
-# Last updated: 2026-09-17
-# Scanner: Trivy v0.74.0
-# Base image: gcr.io/distroless/python3-debian13:nonroot (Debian 13.7)
+# VaultCloud — Accepted Risk (Debian OS layer, distroless base image)
+# Last updated: 2026-09-17 | Scanner: Trivy v0.74.0 | Base: gcr.io/distroless/python3-debian13:nonroot (Debian 13.7)
 
-# libexpat1 — XML parser library
-# Reachability: LOW — VaultCloud does not parse XML. Expat is a transitive
-# dependency of Python's xml.parsers.expat, not imported by app.py.
+# libexpat1 — XML parser (not used by app)
 CVE-2026-66046
 CVE-2026-76956
 CVE-2026-76957
 
-# libncursesw6 / libtinfo6 — Terminal UI libraries
-# Reachability: NONE — Distroless has no shell, no terminal, no ncurses
-# binaries. Libraries present as transitive deps, never loaded/executed.
+# libncursesw6 / libtinfo6 — terminal libs (no shell in distroless)
 CVE-2025-69720
 
-# libpython3.13 / python3.13-minimal / python3.13-venv
-# Reachability: LOW — Affect html.parser, xml.etree, tarfile modules.
-# VaultCloud only uses flask, sqlite3, hashlib, logging, os.
+# libpython3.13 / python3.13-minimal / python3.13-venv — html/xml/tarfile modules (not imported)
 CVE-2026-15308
 CVE-2026-7210
 CVE-2026-82049
 
-# libuuid1 — util-linux UUID library
-# Reachability: NONE — CVEs affect mount helpers (mount, nsenter) and
-# cgroup tools. Distroless has no shell, no mount utilities.
+# libuuid1 — mount helpers (no mount tools in distroless)
 CVE-2026-76642
 CVE-2026-78408
 CVE-2026-78409
 CVE-2026-78410
 
-# Python SBOM false positives
-# Actual installed: msgpack==1.2.2, setuptools==84.0.0 (both above fix versions).
-# Stale SBOM metadata from builder stage python:3.13-slim-trixie triggers detection.
+# Python SBOM false positives — installed versions already above fix versions
 GHSA-6v7p-g79w-8964
 CVE-2025-47273
