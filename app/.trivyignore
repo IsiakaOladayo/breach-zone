@@ -34,3 +34,9 @@ CVE-2026-76642
 CVE-2026-78408
 CVE-2026-78409
 CVE-2026-78410
+
+# Python SBOM false positives
+# Actual installed: msgpack==1.2.2, setuptools==84.0.0 (both above fix versions).
+# Stale SBOM metadata from builder stage python:3.13-slim-trixie triggers detection.
+GHSA-6v7p-g79w-8964
+CVE-2025-47273
