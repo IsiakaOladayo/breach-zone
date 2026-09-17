@@ -5,13 +5,10 @@ credentials QLabs.json
 vulnerability-management/before-after-tracking.md
 vulnerability-management/container-scan-baseline.txt
 vulnerability-management/deliverable4.sh
+vulnerability-management/results/scan-*.txt
+vulnerability-management/results/gate-*.txt
+vulnerability-management/results/secret-*.txt
 vulnerability-management/results/fs-*.txt
-vulnerability-management/results/scan-20260916_041453.txt
-vulnerability-management/results/scan-20260916_073905.txt
-vulnerability-management/results/scan-20260916_075918.txt
-vulnerability-management/results/scan-20260916_093758.txt
-vulnerability-management/results/scan-20260916_141747.txt
-vulnerability-management/results/scan-20260916_145020.txt
 
 infra/breach-zone/output/*
 infra/breach-zone/.terraform/*
