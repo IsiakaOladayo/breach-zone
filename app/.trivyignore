@@ -4,7 +4,7 @@
 # by VaultCloud application code. Fixes depend on upstream Google/Debian
 # security updates to the base image.
 #
-# Last updated: 2026-09-16
+# Last updated: 2026-09-17
 # Scanner: Trivy v0.74.0
 # Base image: gcr.io/distroless/python3-debian13:nonroot (Debian 13.7)
 
