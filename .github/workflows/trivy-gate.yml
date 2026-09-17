@@ -18,7 +18,7 @@ jobs:
         run: docker build -t vaultcloud/api:latest ./app
 
       - name: Trivy image scan (CRITICAL + HIGH)
-        uses: aquasecurity/trivy-action@57a97c75b7f2d0f7e903ea15c17e576423e66e56  # v0.35.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         env:
           TRIVY_IGNOREFILE: ./app/.trivyignore
         with:
@@ -28,7 +28,7 @@ jobs:
           format: table
 
       - name: Trivy filesystem scan (app dependencies)
-        uses: aquasecurity/trivy-action@57a97c75b7f2d0f7e903ea15c17e576423e66e56  # v0.35.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         env:
           TRIVY_IGNOREFILE: ./app/.trivyignore
         with:
