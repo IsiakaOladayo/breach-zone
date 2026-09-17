@@ -25,6 +25,7 @@ jobs:
           exit-code: 1
           trivyignores: ./app/.trivyignore
           format: table
+          version: v0.74.0
 
       - name: Trivy filesystem scan (app dependencies)
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
@@ -35,3 +36,4 @@ jobs:
           exit-code: 1
           trivyignores: ./app/.trivyignore
           format: table
+          version: v0.74.0
