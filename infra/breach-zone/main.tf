@@ -210,24 +210,44 @@ resource "aws_db_instance" "main" {
 
 # ── IAM ──────────────────────────────────────────────────────────────
 
-# role for the EC2 app server
-resource "aws_iam_role" "app_role" {
-  name = "vaultcloud-app-role"
-  assume_role_policy = jsonencode({
+# Least-privilege policy EC2
+resource "aws_iam_policy" "app_permissions" {
+  name = "vaultcloud-app-permissions"
+
+  policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Action    = "sts:AssumeRole"
-      Effect    = "Allow"
-      Principal = { Service = "ec2.amazonaws.com" }
-    }]
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+        Resource = "arn:aws:s3:::vaultcloud-uploads-prod-2024/*"
+      },
+      {
+        Effect = "Allow"
+        Action = "s3:ListBucket"
+        Resource = "arn:aws:s3:::vaultcloud-uploads-prod-2024"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters"
+        ]
+        Resource = "arn:aws:ssm:*:*:parameter/vaultcloud/prod/*"
+      }
+    ]
   })
 }
 
-# full admin access attached "temporarily" 9 months ago
-resource "aws_iam_role_policy_attachment" "app_admin" {
+# custom policy attached to the role
+resource "aws_iam_role_policy_attachment" "app_custom_attachment" {
   role       = aws_iam_role.app_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = aws_iam_policy.app_permissions.arn
 }
+
 
 resource "aws_iam_instance_profile" "app_profile" {
   name = "vaultcloud-app-profile"
@@ -235,17 +255,18 @@ resource "aws_iam_instance_profile" "app_profile" {
 }
 
 # lambda execution role — also admin "to avoid permission errors"
-resource "aws_iam_role" "lambda_role" {
-  name = "vaultcloud-lambda-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action    = "sts:AssumeRole"
-      Effect    = "Allow"
-      Principal = { Service = "lambda.amazonaws.com" }
-    }]
-  })
-}
+#resource "aws_iam_role" "lambda_role" {
+#  name = "vaultcloud-lambda-role"
+#  assume_role_policy = jsonencode({
+#    Version = "2012-10-17"
+#    Statement = [{
+#      Action    = "sts:AssumeRole"
+#      Effect    = "Allow"
+#      Principal = { Service = "lambda.amazonaws.com" }
+#    }]
+#  })
+#}
+
 
 resource "aws_iam_role_policy_attachment" "lambda_admin" {
   role       = aws_iam_role.lambda_role.name
