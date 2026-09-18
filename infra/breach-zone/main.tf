@@ -210,7 +210,7 @@ resource "aws_db_instance" "main" {
 
 # ── IAM ──────────────────────────────────────────────────────────────
 
-# Least-privilege policy EC2
+#Custom least-privilege policy for EC2
 resource "aws_iam_policy" "app_permissions" {
   name = "vaultcloud-app-permissions"
 
@@ -242,13 +242,26 @@ resource "aws_iam_policy" "app_permissions" {
   })
 }
 
-# custom policy attached to the role
-resource "aws_iam_role_policy_attachment" "app_custom_attachment" {
+# Declare the IAM role 
+resource "aws_iam_role" "app_role" {
+  name = "vaultcloud-app-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
+      Principal = { Service = "ec2.amazonaws.com" }
+    }]
+  })
+}
+
+# Custom policy attached to the role (Fixed reference to use .name)
+resource "aws_iam_role_policy_attachment" "app_role_attachment" {
   role       = aws_iam_role.app_role.name
   policy_arn = aws_iam_policy.app_permissions.arn
 }
 
-
+# Instance Profile (Fixed reference to use .name)
 resource "aws_iam_instance_profile" "app_profile" {
   name = "vaultcloud-app-profile"
   role = aws_iam_role.app_role.name
@@ -268,10 +281,10 @@ resource "aws_iam_instance_profile" "app_profile" {
 #}
 
 
-resource "aws_iam_role_policy_attachment" "lambda_admin" {
-  role       = aws_iam_role.lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
+#resource "aws_iam_role_policy_attachment" "lambda_admin" {
+#  role       = aws_iam_role.lambda_role.name
+#  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+#}
 
 # ── SSM PARAMETERS (PLAINTEXT) ───────────────────────────────────────
 
