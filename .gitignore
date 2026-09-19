@@ -10,7 +10,7 @@ vulnerability-management/results/gate-*.txt
 vulnerability-management/results/secret-*.txt
 vulnerability-management/results/fs-*.txt
 
-infra/breach-zone/output/*
+
 infra/breach-zone/.terraform/*
 
 docker-compose.override.yml
