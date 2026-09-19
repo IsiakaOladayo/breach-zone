@@ -1,0 +1,108 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.sdk_response import SdkResponse
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class KeystoneShowSecurityComplianceResponse(SdkResponse):
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'config': 'Config'
+    }
+
+    attribute_map = {
+        'config': 'config'
+    }
+
+    def __init__(self, config=None):
+        r"""KeystoneShowSecurityComplianceResponse
+
+        The model defined in huaweicloud sdk
+
+        :param config: 
+        :type config: :class:`huaweicloudsdkiam.v3.Config`
+        """
+        
+        super().__init__()
+
+        self._config = None
+        self.discriminator = None
+
+        if config is not None:
+            self.config = config
+
+    @property
+    def config(self):
+        r"""Gets the config of this KeystoneShowSecurityComplianceResponse.
+
+        :return: The config of this KeystoneShowSecurityComplianceResponse.
+        :rtype: :class:`huaweicloudsdkiam.v3.Config`
+        """
+        return self._config
+
+    @config.setter
+    def config(self, config):
+        r"""Sets the config of this KeystoneShowSecurityComplianceResponse.
+
+        :param config: The config of this KeystoneShowSecurityComplianceResponse.
+        :type config: :class:`huaweicloudsdkiam.v3.Config`
+        """
+        self._config = config
+
+    def to_dict(self):
+        import warnings
+        warnings.warn("KeystoneShowSecurityComplianceResponse.to_dict() is deprecated and no longer maintained, "
+                      "use to_json_object() to get the response content.", DeprecationWarning)
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, KeystoneShowSecurityComplianceResponse):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

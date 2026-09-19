@@ -1,0 +1,659 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.sdk_response import SdkResponse
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class ShowCompositeHostResponse(SdkResponse):
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'id': 'str',
+        'hostid': 'str',
+        'hostname': 'str',
+        'policyid': 'str',
+        'access_code': 'str',
+        'protect_status': 'int',
+        'access_status': 'int',
+        'proxy': 'bool',
+        'timestamp': 'int',
+        'paid_type': 'str',
+        'flag': 'Flag',
+        'waf_type': 'str',
+        'web_tag': 'str',
+        'access_progress': 'list[AccessProgress]',
+        'premium_waf_instances': 'list[PremiumWafInstances]',
+        'description': 'str',
+        'exclusive_ip': 'bool',
+        'region': 'str',
+        'server': 'list[WafServer]',
+        'enterprise_project_id': 'str'
+    }
+
+    attribute_map = {
+        'id': 'id',
+        'hostid': 'hostid',
+        'hostname': 'hostname',
+        'policyid': 'policyid',
+        'access_code': 'access_code',
+        'protect_status': 'protect_status',
+        'access_status': 'access_status',
+        'proxy': 'proxy',
+        'timestamp': 'timestamp',
+        'paid_type': 'paid_type',
+        'flag': 'flag',
+        'waf_type': 'waf_type',
+        'web_tag': 'web_tag',
+        'access_progress': 'access_progress',
+        'premium_waf_instances': 'premium_waf_instances',
+        'description': 'description',
+        'exclusive_ip': 'exclusive_ip',
+        'region': 'region',
+        'server': 'server',
+        'enterprise_project_id': 'enterprise_project_id'
+    }
+
+    def __init__(self, id=None, hostid=None, hostname=None, policyid=None, access_code=None, protect_status=None, access_status=None, proxy=None, timestamp=None, paid_type=None, flag=None, waf_type=None, web_tag=None, access_progress=None, premium_waf_instances=None, description=None, exclusive_ip=None, region=None, server=None, enterprise_project_id=None):
+        r"""ShowCompositeHostResponse
+
+        The model defined in huaweicloud sdk
+
+        :param id: 域名id
+        :type id: str
+        :param hostid: 域名id
+        :type hostid: str
+        :param hostname: 创建的云模式防护域名
+        :type hostname: str
+        :param policyid: 策略id
+        :type policyid: str
+        :param access_code: cname前缀
+        :type access_code: str
+        :param protect_status: **参数解释：** 域名防护状态标识，用于指定域名在WAF中的防护运行状态 **约束限制：** 不涉及 **取值范围：**  - -1：bypass，该域名的请求直接到达其后端服务器，不再经过WAF  - 0：暂停防护，WAF只转发该域名的请求，不做攻击检测  - 1：开启防护，WAF根据您配置的策略进行攻击检测  **默认取值：** 不涉及
+        :type protect_status: int
+        :param access_status: **参数解释：** 域名接入状态 **约束限制：** 不涉及 **取值范围：**  - 0: 未接入  - 1: 已接入  **默认取值：** 不涉及
+        :type access_status: int
+        :param proxy: 防护域名是否使用代理   - false：不使用代理   - true：使用代理
+        :type proxy: bool
+        :param timestamp: 创建防护域名的时间
+        :type timestamp: int
+        :param paid_type: **参数解释：** 套餐付费模式标识，用于指定套餐的计费方式 **约束限制：** 不涉及 **取值范围：**  - prePaid:包周期模式  - postPaid:按需模式  **默认取值：** prePaid
+        :type paid_type: str
+        :param flag: 
+        :type flag: :class:`huaweicloudsdkwaf.v1.Flag`
+        :param waf_type: 域名所属WAF模式,cloud为云模式，premium为独享模式
+        :type waf_type: str
+        :param web_tag: 网站名称，对应WAF控制台域名详情中的网站名称
+        :type web_tag: str
+        :param access_progress: 接入进度，仅用于新版console(前端)使用
+        :type access_progress: list[:class:`huaweicloudsdkwaf.v1.AccessProgress`]
+        :param premium_waf_instances: 租户引擎实例信息列表
+        :type premium_waf_instances: list[:class:`huaweicloudsdkwaf.v1.PremiumWafInstances`]
+        :param description: 域名描述
+        :type description: str
+        :param exclusive_ip: 是否使用独享ip   - true：使用独享ip   - false：不使用独享ip
+        :type exclusive_ip: bool
+        :param region: 华为云区域ID，控制台创建的域名会携带此参数，api调用创建的域名此参数为空，可以通过华为云上地区和终端节点文档查询区域ID对应的中文名称
+        :type region: str
+        :param server: 防护域名的源站服务器配置信息，只有独享模式域名才返回vpc_id
+        :type server: list[:class:`huaweicloudsdkwaf.v1.WafServer`]
+        :param enterprise_project_id: 企业项目id
+        :type enterprise_project_id: str
+        """
+        
+        super().__init__()
+
+        self._id = None
+        self._hostid = None
+        self._hostname = None
+        self._policyid = None
+        self._access_code = None
+        self._protect_status = None
+        self._access_status = None
+        self._proxy = None
+        self._timestamp = None
+        self._paid_type = None
+        self._flag = None
+        self._waf_type = None
+        self._web_tag = None
+        self._access_progress = None
+        self._premium_waf_instances = None
+        self._description = None
+        self._exclusive_ip = None
+        self._region = None
+        self._server = None
+        self._enterprise_project_id = None
+        self.discriminator = None
+
+        if id is not None:
+            self.id = id
+        if hostid is not None:
+            self.hostid = hostid
+        if hostname is not None:
+            self.hostname = hostname
+        if policyid is not None:
+            self.policyid = policyid
+        if access_code is not None:
+            self.access_code = access_code
+        if protect_status is not None:
+            self.protect_status = protect_status
+        if access_status is not None:
+            self.access_status = access_status
+        if proxy is not None:
+            self.proxy = proxy
+        if timestamp is not None:
+            self.timestamp = timestamp
+        if paid_type is not None:
+            self.paid_type = paid_type
+        if flag is not None:
+            self.flag = flag
+        if waf_type is not None:
+            self.waf_type = waf_type
+        if web_tag is not None:
+            self.web_tag = web_tag
+        if access_progress is not None:
+            self.access_progress = access_progress
+        if premium_waf_instances is not None:
+            self.premium_waf_instances = premium_waf_instances
+        if description is not None:
+            self.description = description
+        if exclusive_ip is not None:
+            self.exclusive_ip = exclusive_ip
+        if region is not None:
+            self.region = region
+        if server is not None:
+            self.server = server
+        if enterprise_project_id is not None:
+            self.enterprise_project_id = enterprise_project_id
+
+    @property
+    def id(self):
+        r"""Gets the id of this ShowCompositeHostResponse.
+
+        域名id
+
+        :return: The id of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        r"""Sets the id of this ShowCompositeHostResponse.
+
+        域名id
+
+        :param id: The id of this ShowCompositeHostResponse.
+        :type id: str
+        """
+        self._id = id
+
+    @property
+    def hostid(self):
+        r"""Gets the hostid of this ShowCompositeHostResponse.
+
+        域名id
+
+        :return: The hostid of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._hostid
+
+    @hostid.setter
+    def hostid(self, hostid):
+        r"""Sets the hostid of this ShowCompositeHostResponse.
+
+        域名id
+
+        :param hostid: The hostid of this ShowCompositeHostResponse.
+        :type hostid: str
+        """
+        self._hostid = hostid
+
+    @property
+    def hostname(self):
+        r"""Gets the hostname of this ShowCompositeHostResponse.
+
+        创建的云模式防护域名
+
+        :return: The hostname of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._hostname
+
+    @hostname.setter
+    def hostname(self, hostname):
+        r"""Sets the hostname of this ShowCompositeHostResponse.
+
+        创建的云模式防护域名
+
+        :param hostname: The hostname of this ShowCompositeHostResponse.
+        :type hostname: str
+        """
+        self._hostname = hostname
+
+    @property
+    def policyid(self):
+        r"""Gets the policyid of this ShowCompositeHostResponse.
+
+        策略id
+
+        :return: The policyid of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._policyid
+
+    @policyid.setter
+    def policyid(self, policyid):
+        r"""Sets the policyid of this ShowCompositeHostResponse.
+
+        策略id
+
+        :param policyid: The policyid of this ShowCompositeHostResponse.
+        :type policyid: str
+        """
+        self._policyid = policyid
+
+    @property
+    def access_code(self):
+        r"""Gets the access_code of this ShowCompositeHostResponse.
+
+        cname前缀
+
+        :return: The access_code of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._access_code
+
+    @access_code.setter
+    def access_code(self, access_code):
+        r"""Sets the access_code of this ShowCompositeHostResponse.
+
+        cname前缀
+
+        :param access_code: The access_code of this ShowCompositeHostResponse.
+        :type access_code: str
+        """
+        self._access_code = access_code
+
+    @property
+    def protect_status(self):
+        r"""Gets the protect_status of this ShowCompositeHostResponse.
+
+        **参数解释：** 域名防护状态标识，用于指定域名在WAF中的防护运行状态 **约束限制：** 不涉及 **取值范围：**  - -1：bypass，该域名的请求直接到达其后端服务器，不再经过WAF  - 0：暂停防护，WAF只转发该域名的请求，不做攻击检测  - 1：开启防护，WAF根据您配置的策略进行攻击检测  **默认取值：** 不涉及
+
+        :return: The protect_status of this ShowCompositeHostResponse.
+        :rtype: int
+        """
+        return self._protect_status
+
+    @protect_status.setter
+    def protect_status(self, protect_status):
+        r"""Sets the protect_status of this ShowCompositeHostResponse.
+
+        **参数解释：** 域名防护状态标识，用于指定域名在WAF中的防护运行状态 **约束限制：** 不涉及 **取值范围：**  - -1：bypass，该域名的请求直接到达其后端服务器，不再经过WAF  - 0：暂停防护，WAF只转发该域名的请求，不做攻击检测  - 1：开启防护，WAF根据您配置的策略进行攻击检测  **默认取值：** 不涉及
+
+        :param protect_status: The protect_status of this ShowCompositeHostResponse.
+        :type protect_status: int
+        """
+        self._protect_status = protect_status
+
+    @property
+    def access_status(self):
+        r"""Gets the access_status of this ShowCompositeHostResponse.
+
+        **参数解释：** 域名接入状态 **约束限制：** 不涉及 **取值范围：**  - 0: 未接入  - 1: 已接入  **默认取值：** 不涉及
+
+        :return: The access_status of this ShowCompositeHostResponse.
+        :rtype: int
+        """
+        return self._access_status
+
+    @access_status.setter
+    def access_status(self, access_status):
+        r"""Sets the access_status of this ShowCompositeHostResponse.
+
+        **参数解释：** 域名接入状态 **约束限制：** 不涉及 **取值范围：**  - 0: 未接入  - 1: 已接入  **默认取值：** 不涉及
+
+        :param access_status: The access_status of this ShowCompositeHostResponse.
+        :type access_status: int
+        """
+        self._access_status = access_status
+
+    @property
+    def proxy(self):
+        r"""Gets the proxy of this ShowCompositeHostResponse.
+
+        防护域名是否使用代理   - false：不使用代理   - true：使用代理
+
+        :return: The proxy of this ShowCompositeHostResponse.
+        :rtype: bool
+        """
+        return self._proxy
+
+    @proxy.setter
+    def proxy(self, proxy):
+        r"""Sets the proxy of this ShowCompositeHostResponse.
+
+        防护域名是否使用代理   - false：不使用代理   - true：使用代理
+
+        :param proxy: The proxy of this ShowCompositeHostResponse.
+        :type proxy: bool
+        """
+        self._proxy = proxy
+
+    @property
+    def timestamp(self):
+        r"""Gets the timestamp of this ShowCompositeHostResponse.
+
+        创建防护域名的时间
+
+        :return: The timestamp of this ShowCompositeHostResponse.
+        :rtype: int
+        """
+        return self._timestamp
+
+    @timestamp.setter
+    def timestamp(self, timestamp):
+        r"""Sets the timestamp of this ShowCompositeHostResponse.
+
+        创建防护域名的时间
+
+        :param timestamp: The timestamp of this ShowCompositeHostResponse.
+        :type timestamp: int
+        """
+        self._timestamp = timestamp
+
+    @property
+    def paid_type(self):
+        r"""Gets the paid_type of this ShowCompositeHostResponse.
+
+        **参数解释：** 套餐付费模式标识，用于指定套餐的计费方式 **约束限制：** 不涉及 **取值范围：**  - prePaid:包周期模式  - postPaid:按需模式  **默认取值：** prePaid
+
+        :return: The paid_type of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._paid_type
+
+    @paid_type.setter
+    def paid_type(self, paid_type):
+        r"""Sets the paid_type of this ShowCompositeHostResponse.
+
+        **参数解释：** 套餐付费模式标识，用于指定套餐的计费方式 **约束限制：** 不涉及 **取值范围：**  - prePaid:包周期模式  - postPaid:按需模式  **默认取值：** prePaid
+
+        :param paid_type: The paid_type of this ShowCompositeHostResponse.
+        :type paid_type: str
+        """
+        self._paid_type = paid_type
+
+    @property
+    def flag(self):
+        r"""Gets the flag of this ShowCompositeHostResponse.
+
+        :return: The flag of this ShowCompositeHostResponse.
+        :rtype: :class:`huaweicloudsdkwaf.v1.Flag`
+        """
+        return self._flag
+
+    @flag.setter
+    def flag(self, flag):
+        r"""Sets the flag of this ShowCompositeHostResponse.
+
+        :param flag: The flag of this ShowCompositeHostResponse.
+        :type flag: :class:`huaweicloudsdkwaf.v1.Flag`
+        """
+        self._flag = flag
+
+    @property
+    def waf_type(self):
+        r"""Gets the waf_type of this ShowCompositeHostResponse.
+
+        域名所属WAF模式,cloud为云模式，premium为独享模式
+
+        :return: The waf_type of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._waf_type
+
+    @waf_type.setter
+    def waf_type(self, waf_type):
+        r"""Sets the waf_type of this ShowCompositeHostResponse.
+
+        域名所属WAF模式,cloud为云模式，premium为独享模式
+
+        :param waf_type: The waf_type of this ShowCompositeHostResponse.
+        :type waf_type: str
+        """
+        self._waf_type = waf_type
+
+    @property
+    def web_tag(self):
+        r"""Gets the web_tag of this ShowCompositeHostResponse.
+
+        网站名称，对应WAF控制台域名详情中的网站名称
+
+        :return: The web_tag of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._web_tag
+
+    @web_tag.setter
+    def web_tag(self, web_tag):
+        r"""Sets the web_tag of this ShowCompositeHostResponse.
+
+        网站名称，对应WAF控制台域名详情中的网站名称
+
+        :param web_tag: The web_tag of this ShowCompositeHostResponse.
+        :type web_tag: str
+        """
+        self._web_tag = web_tag
+
+    @property
+    def access_progress(self):
+        r"""Gets the access_progress of this ShowCompositeHostResponse.
+
+        接入进度，仅用于新版console(前端)使用
+
+        :return: The access_progress of this ShowCompositeHostResponse.
+        :rtype: list[:class:`huaweicloudsdkwaf.v1.AccessProgress`]
+        """
+        return self._access_progress
+
+    @access_progress.setter
+    def access_progress(self, access_progress):
+        r"""Sets the access_progress of this ShowCompositeHostResponse.
+
+        接入进度，仅用于新版console(前端)使用
+
+        :param access_progress: The access_progress of this ShowCompositeHostResponse.
+        :type access_progress: list[:class:`huaweicloudsdkwaf.v1.AccessProgress`]
+        """
+        self._access_progress = access_progress
+
+    @property
+    def premium_waf_instances(self):
+        r"""Gets the premium_waf_instances of this ShowCompositeHostResponse.
+
+        租户引擎实例信息列表
+
+        :return: The premium_waf_instances of this ShowCompositeHostResponse.
+        :rtype: list[:class:`huaweicloudsdkwaf.v1.PremiumWafInstances`]
+        """
+        return self._premium_waf_instances
+
+    @premium_waf_instances.setter
+    def premium_waf_instances(self, premium_waf_instances):
+        r"""Sets the premium_waf_instances of this ShowCompositeHostResponse.
+
+        租户引擎实例信息列表
+
+        :param premium_waf_instances: The premium_waf_instances of this ShowCompositeHostResponse.
+        :type premium_waf_instances: list[:class:`huaweicloudsdkwaf.v1.PremiumWafInstances`]
+        """
+        self._premium_waf_instances = premium_waf_instances
+
+    @property
+    def description(self):
+        r"""Gets the description of this ShowCompositeHostResponse.
+
+        域名描述
+
+        :return: The description of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        r"""Sets the description of this ShowCompositeHostResponse.
+
+        域名描述
+
+        :param description: The description of this ShowCompositeHostResponse.
+        :type description: str
+        """
+        self._description = description
+
+    @property
+    def exclusive_ip(self):
+        r"""Gets the exclusive_ip of this ShowCompositeHostResponse.
+
+        是否使用独享ip   - true：使用独享ip   - false：不使用独享ip
+
+        :return: The exclusive_ip of this ShowCompositeHostResponse.
+        :rtype: bool
+        """
+        return self._exclusive_ip
+
+    @exclusive_ip.setter
+    def exclusive_ip(self, exclusive_ip):
+        r"""Sets the exclusive_ip of this ShowCompositeHostResponse.
+
+        是否使用独享ip   - true：使用独享ip   - false：不使用独享ip
+
+        :param exclusive_ip: The exclusive_ip of this ShowCompositeHostResponse.
+        :type exclusive_ip: bool
+        """
+        self._exclusive_ip = exclusive_ip
+
+    @property
+    def region(self):
+        r"""Gets the region of this ShowCompositeHostResponse.
+
+        华为云区域ID，控制台创建的域名会携带此参数，api调用创建的域名此参数为空，可以通过华为云上地区和终端节点文档查询区域ID对应的中文名称
+
+        :return: The region of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._region
+
+    @region.setter
+    def region(self, region):
+        r"""Sets the region of this ShowCompositeHostResponse.
+
+        华为云区域ID，控制台创建的域名会携带此参数，api调用创建的域名此参数为空，可以通过华为云上地区和终端节点文档查询区域ID对应的中文名称
+
+        :param region: The region of this ShowCompositeHostResponse.
+        :type region: str
+        """
+        self._region = region
+
+    @property
+    def server(self):
+        r"""Gets the server of this ShowCompositeHostResponse.
+
+        防护域名的源站服务器配置信息，只有独享模式域名才返回vpc_id
+
+        :return: The server of this ShowCompositeHostResponse.
+        :rtype: list[:class:`huaweicloudsdkwaf.v1.WafServer`]
+        """
+        return self._server
+
+    @server.setter
+    def server(self, server):
+        r"""Sets the server of this ShowCompositeHostResponse.
+
+        防护域名的源站服务器配置信息，只有独享模式域名才返回vpc_id
+
+        :param server: The server of this ShowCompositeHostResponse.
+        :type server: list[:class:`huaweicloudsdkwaf.v1.WafServer`]
+        """
+        self._server = server
+
+    @property
+    def enterprise_project_id(self):
+        r"""Gets the enterprise_project_id of this ShowCompositeHostResponse.
+
+        企业项目id
+
+        :return: The enterprise_project_id of this ShowCompositeHostResponse.
+        :rtype: str
+        """
+        return self._enterprise_project_id
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, enterprise_project_id):
+        r"""Sets the enterprise_project_id of this ShowCompositeHostResponse.
+
+        企业项目id
+
+        :param enterprise_project_id: The enterprise_project_id of this ShowCompositeHostResponse.
+        :type enterprise_project_id: str
+        """
+        self._enterprise_project_id = enterprise_project_id
+
+    def to_dict(self):
+        import warnings
+        warnings.warn("ShowCompositeHostResponse.to_dict() is deprecated and no longer maintained, "
+                      "use to_json_object() to get the response content.", DeprecationWarning)
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, ShowCompositeHostResponse):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

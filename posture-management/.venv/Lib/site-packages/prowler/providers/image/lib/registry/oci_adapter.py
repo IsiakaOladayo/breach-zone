@@ -1,0 +1,398 @@
+"""Generic OCI Distribution Spec registry adapter."""
+
+from __future__ import annotations
+
+import base64
+import re
+import threading
+from typing import TYPE_CHECKING
+from urllib.parse import urlparse
+
+from prowler.lib.logger import logger
+from prowler.providers.image.exceptions.exceptions import (
+    ImageRegistryAuthError,
+    ImageRegistryCatalogError,
+    ImageRegistryNetworkError,
+)
+from prowler.providers.image.lib.registry.base import RegistryAdapter
+
+if TYPE_CHECKING:
+    import requests
+
+
+OCI_MANIFEST_MEDIA_TYPE = "application/vnd.oci.image.manifest.v1+json"
+
+MANIFEST_ACCEPT_TYPES = (
+    "application/vnd.docker.distribution.manifest.v2+json",
+    "application/vnd.docker.distribution.manifest.list.v2+json",
+    OCI_MANIFEST_MEDIA_TYPE,
+    "application/vnd.oci.image.index.v1+json",
+)
+
+# Multi-arch indexes: their children are resolved by trivy itself.
+INDEX_MEDIA_TYPES = (
+    "application/vnd.docker.distribution.manifest.list.v2+json",
+    "application/vnd.oci.image.index.v1+json",
+)
+
+IMAGE_CONFIG_MEDIA_TYPES = (
+    "application/vnd.oci.image.config.v1+json",
+    "application/vnd.docker.container.image.v1+json",
+)
+
+
+class OciRegistryAdapter(RegistryAdapter):
+    """Adapter for registries implementing OCI Distribution Spec."""
+
+    def __init__(
+        self,
+        registry_url: str,
+        username: str | None = None,
+        password: str | None = None,
+        token: str | None = None,
+        verify_ssl: bool = True,
+    ) -> None:
+        super().__init__(registry_url, username, password, token, verify_ssl)
+        self._base_url = self._normalise_url(registry_url)
+        self._bearer_token: str | None = None
+        self._basic_auth_verified = False
+        self._anonymous_verified = False
+        # Enumeration inspects manifests from a thread pool; serialise token
+        # exchanges so N concurrent 401s don't trigger N auth round-trips.
+        self._auth_lock = threading.Lock()
+
+    def __getstate__(self) -> dict:
+        state = super().__getstate__()
+        del state["_auth_lock"]
+        return state
+
+    def __setstate__(self, state: dict) -> None:
+        self.__dict__.update(state)
+        self._auth_lock = threading.Lock()
+
+    @staticmethod
+    def _normalise_url(url: str) -> str:
+        url = url.rstrip("/")
+        if not url.startswith(("http://", "https://")):
+            url = f"https://{url}"
+        return url
+
+    def _origin_url(self) -> str:
+        return self._base_url
+
+    @staticmethod
+    def _find_challenge(www_authenticate: str, scheme: str) -> str | None:
+        """Extract one scheme's challenge from a (possibly multi-challenge) header.
+
+        RFC 7235 allows several comma-separated challenges in any order, e.g.
+        ``Basic realm="registry", Bearer realm="...",service="..."``.
+        """
+        match = re.search(
+            rf'(?:^|,)\s*{scheme}\b((?:\s*[\w-]+="[^"]*"\s*,?)*)',
+            www_authenticate,
+            re.IGNORECASE,
+        )
+        if not match:
+            return None
+        return f"{scheme} {match.group(1).strip().rstrip(',')}"
+
+    def list_repositories(self) -> list[str]:
+        self._ensure_auth()
+        repositories: list[str] = []
+        url = f"{self._base_url}/v2/_catalog"
+        params: dict = {"n": 200}
+        while url:
+            resp = self._authed_request("GET", url, params=params)
+            if resp.status_code == 404:
+                raise ImageRegistryCatalogError(
+                    file=__file__,
+                    message=f"Registry at {self.registry_url} does not support catalog listing (/_catalog returned 404). Use --image or --image-list instead.",
+                )
+            self._check_response(resp, "catalog listing")
+            data = resp.json()
+            repositories.extend(data.get("repositories", []))
+            url = self._next_page_url(resp)
+            params = {}
+        return repositories
+
+    def list_tags(self, repository: str) -> list[str]:
+        self._ensure_auth(repository=repository)
+        tags: list[str] = []
+        url = f"{self._base_url}/v2/{repository}/tags/list"
+        params: dict = {"n": 200}
+        while url:
+            resp = self._authed_request("GET", url, params=params)
+            self._check_response(resp, f"tag listing for {repository}")
+            data = resp.json()
+            tags.extend(data.get("tags", []) or [])
+            url = self._next_page_url(resp)
+            params = {}
+        return tags
+
+    def is_container_image(self, repository: str, tag: str) -> bool:
+        """Inspect the manifest to tell container images apart from other OCI artifacts.
+
+        Uncertainty (network error, unparseable manifest) resolves to True so a
+        transient failure never silently drops a real image — trivy gives the
+        final verdict.
+        """
+        url = f"{self._base_url}/v2/{repository}/manifests/{tag}"
+        try:
+            self._ensure_auth(repository=repository)
+            resp = self._authed_request(
+                "GET", url, headers={"Accept": ", ".join(MANIFEST_ACCEPT_TYPES)}
+            )
+        except Exception as error:
+            logger.warning(
+                f"Could not fetch manifest for {repository}:{tag}, assuming image: {error}"
+            )
+            return True
+        if resp.status_code != 200:
+            logger.warning(
+                f"Manifest request for {repository}:{tag} returned HTTP {resp.status_code}, assuming image"
+            )
+            return True
+
+        # RFC 9110: media type tokens are case-insensitive
+        content_type = (
+            resp.headers.get("Content-Type", "").split(";")[0].strip().lower()
+        )
+        if content_type == "application/vnd.docker.distribution.manifest.v2+json":
+            return True
+        if content_type in INDEX_MEDIA_TYPES or content_type == OCI_MANIFEST_MEDIA_TYPE:
+            # Helm charts, cosign signatures, SBOMs... reuse the OCI manifest
+            # media type, and since image-spec v1.1 an index can also represent
+            # a non-image artifact; only artifactType (or, for manifests,
+            # config.mediaType) tells them apart.
+            try:
+                manifest = resp.json()
+            except ValueError:
+                return True
+            artifact_type = (manifest.get("artifactType") or "").lower()
+            if artifact_type:
+                return artifact_type in IMAGE_CONFIG_MEDIA_TYPES
+            if content_type in INDEX_MEDIA_TYPES:
+                # Plain multi-arch index
+                return True
+            config_type = (manifest.get("config", {}).get("mediaType") or "").lower()
+            return config_type in IMAGE_CONFIG_MEDIA_TYPES
+        logger.info(
+            f"Skipping {repository}:{tag} — manifest media type {content_type or 'unknown'} is not a container image"
+        )
+        return False
+
+    def _ensure_auth(self, repository: str | None = None) -> None:
+        if self._bearer_token or self._basic_auth_verified or self._anonymous_verified:
+            return
+        with self._auth_lock:
+            if (
+                self._bearer_token
+                or self._basic_auth_verified
+                or self._anonymous_verified
+            ):
+                return
+            self._authenticate(repository=repository)
+
+    def _authenticate(self, repository: str | None = None) -> None:
+        if self.token:
+            self._bearer_token = self.token
+            return
+        ping_url = f"{self._base_url}/v2/"
+        resp = self._request_with_retry("GET", ping_url)
+        if resp.status_code == 200:
+            self._anonymous_verified = True
+            return
+        if resp.status_code == 401:
+            www_auth = resp.headers.get("Www-Authenticate", "")
+
+            bearer_challenge = self._find_challenge(www_auth, "Bearer")
+            if not bearer_challenge:
+                # Basic auth challenge (e.g., AWS ECR)
+                if self.username and self.password:
+                    self._basic_auth_verified = True
+                    return
+                raise ImageRegistryAuthError(
+                    file=__file__,
+                    message=(
+                        f"Registry {self.registry_url} requires authentication "
+                        f"but no credentials provided. "
+                        f"Set REGISTRY_USERNAME and REGISTRY_PASSWORD."
+                    ),
+                )
+
+            # Bearer token exchange (standard OCI flow)
+            self._bearer_token = self._obtain_bearer_token(bearer_challenge, repository)
+            return
+        if resp.status_code == 403:
+            raise ImageRegistryAuthError(
+                file=__file__,
+                message=f"Access denied to registry {self.registry_url} (HTTP 403). Check REGISTRY_USERNAME and REGISTRY_PASSWORD.",
+            )
+        raise ImageRegistryNetworkError(
+            file=__file__,
+            message=f"Unexpected HTTP {resp.status_code} from registry {self.registry_url} during auth check.",
+        )
+
+    def _obtain_bearer_token(
+        self, www_authenticate: str, repository: str | None = None
+    ) -> str:
+        match = re.search(r'realm="([^"]+)"', www_authenticate)
+        if not match:
+            raise ImageRegistryAuthError(
+                file=__file__,
+                message=f"Cannot parse token endpoint from registry {self.registry_url}. Www-Authenticate: {www_authenticate[:200]}",
+            )
+        realm = self._validate_outbound_url(match.group(1))
+        realm_is_http = urlparse(realm).scheme == "http"
+        if realm_is_http and urlparse(self._base_url).scheme == "https":
+            # Transport downgrade: an on-path attacker could read or replace
+            # the token. An all-HTTP registry is an explicit operator choice.
+            raise ImageRegistryAuthError(
+                file=__file__,
+                message=(
+                    f"Registry {self.registry_url} uses HTTPS but its token realm "
+                    f"{realm} uses HTTP; refusing to exchange a token over cleartext."
+                ),
+            )
+        if realm_is_http:
+            logger.warning(f"Bearer token realm uses HTTP (not HTTPS): {realm}")
+        params: dict = {}
+        service_match = re.search(r'service="([^"]+)"', www_authenticate)
+        if service_match:
+            params["service"] = service_match.group(1)
+        scope_match = re.search(r'scope="([^"]+)"', www_authenticate)
+        if scope_match:
+            params["scope"] = scope_match.group(1)
+        elif repository:
+            params["scope"] = f"repository:{repository}:pull"
+        auth = None
+        if self.username and self.password:
+            auth = (self.username, self.password)
+        resp = self._request_with_retry("GET", realm, params=params, auth=auth)
+        if resp.status_code != 200:
+            raise ImageRegistryAuthError(
+                file=__file__,
+                message=f"Failed to obtain bearer token from {realm} (HTTP {resp.status_code}). Check REGISTRY_USERNAME and REGISTRY_PASSWORD.",
+            )
+        data = resp.json()
+        token = data.get("token") or data.get("access_token", "")
+        if not token:
+            raise ImageRegistryAuthError(
+                file=__file__,
+                message=f"Token endpoint {realm} returned an empty token. Check REGISTRY_USERNAME and REGISTRY_PASSWORD.",
+            )
+        return token
+
+    def _resolve_basic_credentials(self) -> tuple[str | None, str | None]:
+        """Decode pre-encoded base64 auth tokens (e.g., from aws ecr get-authorization-token).
+
+        Returns (username, password) — decoded if the password is a base64 token
+        containing 'username:real_password', otherwise returned as-is.
+        """
+        if not self.password:
+            return self.username, self.password
+        try:
+            decoded = base64.b64decode(self.password).decode("utf-8")
+            if decoded.startswith(f"{self.username}:"):
+                return self.username, decoded[len(self.username) + 1 :]
+        except (ValueError, UnicodeDecodeError):
+            logger.debug("Password is not a base64-encoded auth token, using as-is")
+        return self.username, self.password
+
+    def _authed_request(self, method: str, url: str, **kwargs) -> requests.Response:
+        resp = self._do_authed_request(method, url, **kwargs)
+        if resp.status_code == 401 and self._bearer_token:
+            challenge = self._find_challenge(
+                resp.headers.get("Www-Authenticate", ""), "Bearer"
+            )
+            if challenge and self._is_same_origin_as_registry(url):
+                # The cached token may be scoped to another repository; the
+                # response challenge names the exact scope this endpoint needs.
+                logger.debug(
+                    f"Bearer token rejected (HTTP 401), re-authenticating with response challenge scope for {url}"
+                )
+                fresh_token = self._obtain_bearer_token(challenge)
+                self._bearer_token = fresh_token
+            else:
+                logger.debug(
+                    f"Bearer token rejected (HTTP 401), re-authenticating to {self.registry_url}"
+                )
+                self._bearer_token = None
+                self._ensure_auth()
+                fresh_token = self._bearer_token
+            # Retry with the token this request obtained: a concurrent worker
+            # may have already replaced the shared one with another scope.
+            resp = self._do_authed_request(
+                method, url, bearer_token=fresh_token, **kwargs
+            )
+        if (
+            resp.status_code == 401
+            and self._bearer_token
+            and self.username
+            and self.password
+            and self._is_same_origin_as_registry(url)
+            and self._find_challenge(resp.headers.get("Www-Authenticate", ""), "Basic")
+        ):
+            # Registries like Harbor guard some endpoints (e.g. /_catalog) with
+            # Basic even when /v2/ negotiates Bearer.
+            logger.debug(
+                f"Bearer token not accepted for {url}, retrying with Basic auth"
+            )
+            user, pwd = self._resolve_basic_credentials()
+            resp = self._request_with_retry(method, url, auth=(user, pwd), **kwargs)
+            if resp.ok:
+                # Stay in Basic mode so later requests (e.g. catalog pages)
+                # skip the doomed Bearer round-trips.
+                self._basic_auth_verified = True
+                self._bearer_token = None
+        if resp.status_code == 401 and not self._bearer_token:
+            bearer_challenge = self._find_challenge(
+                resp.headers.get("Www-Authenticate", ""), "Bearer"
+            )
+            if bearer_challenge and self._is_same_origin_as_registry(url):
+                # The inverse switch: /v2/ negotiated Basic (or anonymous) but
+                # this endpoint demands Bearer. The challenge carries the right
+                # scope.
+                logger.debug(f"Basic auth not accepted for {url}, switching to Bearer")
+                fresh_token = self._obtain_bearer_token(bearer_challenge)
+                self._bearer_token = fresh_token
+                resp = self._do_authed_request(
+                    method, url, bearer_token=fresh_token, **kwargs
+                )
+        return resp
+
+    def _do_authed_request(
+        self, method: str, url: str, bearer_token: str | None = None, **kwargs
+    ) -> requests.Response:
+        headers = kwargs.pop("headers", {})
+        if self._is_same_origin_as_registry(url):
+            token = bearer_token or self._bearer_token
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+            elif self.username and self.password:
+                user, pwd = self._resolve_basic_credentials()
+                kwargs.setdefault("auth", (user, pwd))
+        kwargs["headers"] = headers
+        return self._request_with_retry(method, url, **kwargs)
+
+    def _is_same_origin_as_registry(self, url: str) -> bool:
+        target = urlparse(url)
+        origin = urlparse(self._base_url)
+        return (
+            target.scheme == origin.scheme
+            and (target.hostname or "") == (origin.hostname or "")
+            and target.port == origin.port
+        )
+
+    def _check_response(self, resp: requests.Response, context: str) -> None:
+        if resp.status_code == 200:
+            return
+        if resp.status_code in (401, 403):
+            raise ImageRegistryAuthError(
+                file=__file__,
+                message=f"Authentication failed for {context} on {self.registry_url} (HTTP {resp.status_code}). Check REGISTRY_USERNAME and REGISTRY_PASSWORD.",
+            )
+        raise ImageRegistryNetworkError(
+            file=__file__,
+            message=f"Unexpected error during {context} on {self.registry_url} (HTTP {resp.status_code}): {resp.text[:200]}",
+        )

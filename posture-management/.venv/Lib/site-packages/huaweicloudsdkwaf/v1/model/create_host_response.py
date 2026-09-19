@@ -1,0 +1,655 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.sdk_response import SdkResponse
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class CreateHostResponse(SdkResponse):
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'id': 'str',
+        'hostname': 'str',
+        'policyid': 'str',
+        'access_code': 'str',
+        'protect_status': 'int',
+        'access_status': 'int',
+        'lb_algorithm': 'str',
+        'protocol': 'str',
+        'certificateid': 'str',
+        'certificatename': 'str',
+        'server': 'list[CloudWafServer]',
+        'proxy': 'bool',
+        'timestamp': 'int',
+        'exclusive_ip': 'bool',
+        'web_tag': 'str',
+        'http2_enable': 'bool',
+        'block_page': 'BlockPage',
+        'flag': 'Flag',
+        'extend': 'dict(str, str)',
+        'forward_header_map': 'dict(str, str)'
+    }
+
+    attribute_map = {
+        'id': 'id',
+        'hostname': 'hostname',
+        'policyid': 'policyid',
+        'access_code': 'access_code',
+        'protect_status': 'protect_status',
+        'access_status': 'access_status',
+        'lb_algorithm': 'lb_algorithm',
+        'protocol': 'protocol',
+        'certificateid': 'certificateid',
+        'certificatename': 'certificatename',
+        'server': 'server',
+        'proxy': 'proxy',
+        'timestamp': 'timestamp',
+        'exclusive_ip': 'exclusive_ip',
+        'web_tag': 'web_tag',
+        'http2_enable': 'http2_enable',
+        'block_page': 'block_page',
+        'flag': 'flag',
+        'extend': 'extend',
+        'forward_header_map': 'forward_header_map'
+    }
+
+    def __init__(self, id=None, hostname=None, policyid=None, access_code=None, protect_status=None, access_status=None, lb_algorithm=None, protocol=None, certificateid=None, certificatename=None, server=None, proxy=None, timestamp=None, exclusive_ip=None, web_tag=None, http2_enable=None, block_page=None, flag=None, extend=None, forward_header_map=None):
+        r"""CreateHostResponse
+
+        The model defined in huaweicloud sdk
+
+        :param id: 域名id
+        :type id: str
+        :param hostname: 创建的云模式防护域名
+        :type hostname: str
+        :param policyid: 策略id
+        :type policyid: str
+        :param access_code: cname前缀
+        :type access_code: str
+        :param protect_status: **参数解释：** 域名防护状态标识，用于指定域名在WAF中的防护运行状态 **约束限制：** 不涉及 **取值范围：**  - -1：bypass，该域名的请求直接到达其后端服务器，不再经过WAF  - 0：暂停防护，WAF只转发该域名的请求，不做攻击检测  - 1：开启防护，WAF根据您配置的策略进行攻击检测  **默认取值：** 不涉及
+        :type protect_status: int
+        :param access_status: **参数解释：** 域名接入状态 **约束限制：** 不涉及 **取值范围：**  - 0: 未接入  - 1: 已接入  **默认取值：** 不涉及
+        :type access_status: int
+        :param lb_algorithm: **参数解释：** LB负载均衡，仅专业版和企业版支持配置负载均衡算法 **约束限制：** 不涉及 **取值范围：**  - ip_hash: 源IP Hash,将某个IP的请求定向到同一个服务器  - round_robin: 加权轮询,所有请求将按权重轮流分配给源站服务器  - session_hash: 将某个Session标识的请求定向到同一个源站服务器，请确保在域名添加完毕后配置攻击惩罚的流量标识，否则Session Hash配置不生效  **默认取值：** 不涉及
+        :type lb_algorithm: str
+        :param protocol: 返回的客户端协议类型
+        :type protocol: str
+        :param certificateid: 返回的证书id
+        :type certificateid: str
+        :param certificatename: 证书名称
+        :type certificatename: str
+        :param server: 防护域名的源站服务器配置信息
+        :type server: list[:class:`huaweicloudsdkwaf.v1.CloudWafServer`]
+        :param proxy: 防护域名是否使用代理   - false：不使用代理   - true：使用代理
+        :type proxy: bool
+        :param timestamp: 创建防护域名的时间
+        :type timestamp: int
+        :param exclusive_ip: 是否使用独享ip   - true：使用独享ip   - false：不使用独享ip
+        :type exclusive_ip: bool
+        :param web_tag: 网站名称，对应WAF控制台域名详情中的网站名称
+        :type web_tag: str
+        :param http2_enable: 是否支持http2   - true：表示支持http2   - false：表示不支持http2
+        :type http2_enable: bool
+        :param block_page: 
+        :type block_page: :class:`huaweicloudsdkwaf.v1.BlockPage`
+        :param flag: 
+        :type flag: :class:`huaweicloudsdkwaf.v1.Flag`
+        :param extend: 扩展字段，用于保存防护域名的一些配置信息。
+        :type extend: dict(str, str)
+        :param forward_header_map: 字段转发配置，WAF会将添加的字段插到header中，转给源站；Key不能跟nginx原生字段重复。Value支持的值包括:   - $time_local   - $request_id   - $connection_requests   - $tenant_id   - $project_id   - $remote_addr   - $remote_port   - $scheme   - $request_method   - $http_host   -$origin_uri   - $request_length   - $ssl_server_name   - $ssl_protocol   - $ssl_curves   - $ssl_session_reused
+        :type forward_header_map: dict(str, str)
+        """
+        
+        super().__init__()
+
+        self._id = None
+        self._hostname = None
+        self._policyid = None
+        self._access_code = None
+        self._protect_status = None
+        self._access_status = None
+        self._lb_algorithm = None
+        self._protocol = None
+        self._certificateid = None
+        self._certificatename = None
+        self._server = None
+        self._proxy = None
+        self._timestamp = None
+        self._exclusive_ip = None
+        self._web_tag = None
+        self._http2_enable = None
+        self._block_page = None
+        self._flag = None
+        self._extend = None
+        self._forward_header_map = None
+        self.discriminator = None
+
+        if id is not None:
+            self.id = id
+        if hostname is not None:
+            self.hostname = hostname
+        if policyid is not None:
+            self.policyid = policyid
+        if access_code is not None:
+            self.access_code = access_code
+        if protect_status is not None:
+            self.protect_status = protect_status
+        if access_status is not None:
+            self.access_status = access_status
+        if lb_algorithm is not None:
+            self.lb_algorithm = lb_algorithm
+        if protocol is not None:
+            self.protocol = protocol
+        if certificateid is not None:
+            self.certificateid = certificateid
+        if certificatename is not None:
+            self.certificatename = certificatename
+        if server is not None:
+            self.server = server
+        if proxy is not None:
+            self.proxy = proxy
+        if timestamp is not None:
+            self.timestamp = timestamp
+        if exclusive_ip is not None:
+            self.exclusive_ip = exclusive_ip
+        if web_tag is not None:
+            self.web_tag = web_tag
+        if http2_enable is not None:
+            self.http2_enable = http2_enable
+        if block_page is not None:
+            self.block_page = block_page
+        if flag is not None:
+            self.flag = flag
+        if extend is not None:
+            self.extend = extend
+        if forward_header_map is not None:
+            self.forward_header_map = forward_header_map
+
+    @property
+    def id(self):
+        r"""Gets the id of this CreateHostResponse.
+
+        域名id
+
+        :return: The id of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        r"""Sets the id of this CreateHostResponse.
+
+        域名id
+
+        :param id: The id of this CreateHostResponse.
+        :type id: str
+        """
+        self._id = id
+
+    @property
+    def hostname(self):
+        r"""Gets the hostname of this CreateHostResponse.
+
+        创建的云模式防护域名
+
+        :return: The hostname of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._hostname
+
+    @hostname.setter
+    def hostname(self, hostname):
+        r"""Sets the hostname of this CreateHostResponse.
+
+        创建的云模式防护域名
+
+        :param hostname: The hostname of this CreateHostResponse.
+        :type hostname: str
+        """
+        self._hostname = hostname
+
+    @property
+    def policyid(self):
+        r"""Gets the policyid of this CreateHostResponse.
+
+        策略id
+
+        :return: The policyid of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._policyid
+
+    @policyid.setter
+    def policyid(self, policyid):
+        r"""Sets the policyid of this CreateHostResponse.
+
+        策略id
+
+        :param policyid: The policyid of this CreateHostResponse.
+        :type policyid: str
+        """
+        self._policyid = policyid
+
+    @property
+    def access_code(self):
+        r"""Gets the access_code of this CreateHostResponse.
+
+        cname前缀
+
+        :return: The access_code of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._access_code
+
+    @access_code.setter
+    def access_code(self, access_code):
+        r"""Sets the access_code of this CreateHostResponse.
+
+        cname前缀
+
+        :param access_code: The access_code of this CreateHostResponse.
+        :type access_code: str
+        """
+        self._access_code = access_code
+
+    @property
+    def protect_status(self):
+        r"""Gets the protect_status of this CreateHostResponse.
+
+        **参数解释：** 域名防护状态标识，用于指定域名在WAF中的防护运行状态 **约束限制：** 不涉及 **取值范围：**  - -1：bypass，该域名的请求直接到达其后端服务器，不再经过WAF  - 0：暂停防护，WAF只转发该域名的请求，不做攻击检测  - 1：开启防护，WAF根据您配置的策略进行攻击检测  **默认取值：** 不涉及
+
+        :return: The protect_status of this CreateHostResponse.
+        :rtype: int
+        """
+        return self._protect_status
+
+    @protect_status.setter
+    def protect_status(self, protect_status):
+        r"""Sets the protect_status of this CreateHostResponse.
+
+        **参数解释：** 域名防护状态标识，用于指定域名在WAF中的防护运行状态 **约束限制：** 不涉及 **取值范围：**  - -1：bypass，该域名的请求直接到达其后端服务器，不再经过WAF  - 0：暂停防护，WAF只转发该域名的请求，不做攻击检测  - 1：开启防护，WAF根据您配置的策略进行攻击检测  **默认取值：** 不涉及
+
+        :param protect_status: The protect_status of this CreateHostResponse.
+        :type protect_status: int
+        """
+        self._protect_status = protect_status
+
+    @property
+    def access_status(self):
+        r"""Gets the access_status of this CreateHostResponse.
+
+        **参数解释：** 域名接入状态 **约束限制：** 不涉及 **取值范围：**  - 0: 未接入  - 1: 已接入  **默认取值：** 不涉及
+
+        :return: The access_status of this CreateHostResponse.
+        :rtype: int
+        """
+        return self._access_status
+
+    @access_status.setter
+    def access_status(self, access_status):
+        r"""Sets the access_status of this CreateHostResponse.
+
+        **参数解释：** 域名接入状态 **约束限制：** 不涉及 **取值范围：**  - 0: 未接入  - 1: 已接入  **默认取值：** 不涉及
+
+        :param access_status: The access_status of this CreateHostResponse.
+        :type access_status: int
+        """
+        self._access_status = access_status
+
+    @property
+    def lb_algorithm(self):
+        r"""Gets the lb_algorithm of this CreateHostResponse.
+
+        **参数解释：** LB负载均衡，仅专业版和企业版支持配置负载均衡算法 **约束限制：** 不涉及 **取值范围：**  - ip_hash: 源IP Hash,将某个IP的请求定向到同一个服务器  - round_robin: 加权轮询,所有请求将按权重轮流分配给源站服务器  - session_hash: 将某个Session标识的请求定向到同一个源站服务器，请确保在域名添加完毕后配置攻击惩罚的流量标识，否则Session Hash配置不生效  **默认取值：** 不涉及
+
+        :return: The lb_algorithm of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._lb_algorithm
+
+    @lb_algorithm.setter
+    def lb_algorithm(self, lb_algorithm):
+        r"""Sets the lb_algorithm of this CreateHostResponse.
+
+        **参数解释：** LB负载均衡，仅专业版和企业版支持配置负载均衡算法 **约束限制：** 不涉及 **取值范围：**  - ip_hash: 源IP Hash,将某个IP的请求定向到同一个服务器  - round_robin: 加权轮询,所有请求将按权重轮流分配给源站服务器  - session_hash: 将某个Session标识的请求定向到同一个源站服务器，请确保在域名添加完毕后配置攻击惩罚的流量标识，否则Session Hash配置不生效  **默认取值：** 不涉及
+
+        :param lb_algorithm: The lb_algorithm of this CreateHostResponse.
+        :type lb_algorithm: str
+        """
+        self._lb_algorithm = lb_algorithm
+
+    @property
+    def protocol(self):
+        r"""Gets the protocol of this CreateHostResponse.
+
+        返回的客户端协议类型
+
+        :return: The protocol of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._protocol
+
+    @protocol.setter
+    def protocol(self, protocol):
+        r"""Sets the protocol of this CreateHostResponse.
+
+        返回的客户端协议类型
+
+        :param protocol: The protocol of this CreateHostResponse.
+        :type protocol: str
+        """
+        self._protocol = protocol
+
+    @property
+    def certificateid(self):
+        r"""Gets the certificateid of this CreateHostResponse.
+
+        返回的证书id
+
+        :return: The certificateid of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._certificateid
+
+    @certificateid.setter
+    def certificateid(self, certificateid):
+        r"""Sets the certificateid of this CreateHostResponse.
+
+        返回的证书id
+
+        :param certificateid: The certificateid of this CreateHostResponse.
+        :type certificateid: str
+        """
+        self._certificateid = certificateid
+
+    @property
+    def certificatename(self):
+        r"""Gets the certificatename of this CreateHostResponse.
+
+        证书名称
+
+        :return: The certificatename of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._certificatename
+
+    @certificatename.setter
+    def certificatename(self, certificatename):
+        r"""Sets the certificatename of this CreateHostResponse.
+
+        证书名称
+
+        :param certificatename: The certificatename of this CreateHostResponse.
+        :type certificatename: str
+        """
+        self._certificatename = certificatename
+
+    @property
+    def server(self):
+        r"""Gets the server of this CreateHostResponse.
+
+        防护域名的源站服务器配置信息
+
+        :return: The server of this CreateHostResponse.
+        :rtype: list[:class:`huaweicloudsdkwaf.v1.CloudWafServer`]
+        """
+        return self._server
+
+    @server.setter
+    def server(self, server):
+        r"""Sets the server of this CreateHostResponse.
+
+        防护域名的源站服务器配置信息
+
+        :param server: The server of this CreateHostResponse.
+        :type server: list[:class:`huaweicloudsdkwaf.v1.CloudWafServer`]
+        """
+        self._server = server
+
+    @property
+    def proxy(self):
+        r"""Gets the proxy of this CreateHostResponse.
+
+        防护域名是否使用代理   - false：不使用代理   - true：使用代理
+
+        :return: The proxy of this CreateHostResponse.
+        :rtype: bool
+        """
+        return self._proxy
+
+    @proxy.setter
+    def proxy(self, proxy):
+        r"""Sets the proxy of this CreateHostResponse.
+
+        防护域名是否使用代理   - false：不使用代理   - true：使用代理
+
+        :param proxy: The proxy of this CreateHostResponse.
+        :type proxy: bool
+        """
+        self._proxy = proxy
+
+    @property
+    def timestamp(self):
+        r"""Gets the timestamp of this CreateHostResponse.
+
+        创建防护域名的时间
+
+        :return: The timestamp of this CreateHostResponse.
+        :rtype: int
+        """
+        return self._timestamp
+
+    @timestamp.setter
+    def timestamp(self, timestamp):
+        r"""Sets the timestamp of this CreateHostResponse.
+
+        创建防护域名的时间
+
+        :param timestamp: The timestamp of this CreateHostResponse.
+        :type timestamp: int
+        """
+        self._timestamp = timestamp
+
+    @property
+    def exclusive_ip(self):
+        r"""Gets the exclusive_ip of this CreateHostResponse.
+
+        是否使用独享ip   - true：使用独享ip   - false：不使用独享ip
+
+        :return: The exclusive_ip of this CreateHostResponse.
+        :rtype: bool
+        """
+        return self._exclusive_ip
+
+    @exclusive_ip.setter
+    def exclusive_ip(self, exclusive_ip):
+        r"""Sets the exclusive_ip of this CreateHostResponse.
+
+        是否使用独享ip   - true：使用独享ip   - false：不使用独享ip
+
+        :param exclusive_ip: The exclusive_ip of this CreateHostResponse.
+        :type exclusive_ip: bool
+        """
+        self._exclusive_ip = exclusive_ip
+
+    @property
+    def web_tag(self):
+        r"""Gets the web_tag of this CreateHostResponse.
+
+        网站名称，对应WAF控制台域名详情中的网站名称
+
+        :return: The web_tag of this CreateHostResponse.
+        :rtype: str
+        """
+        return self._web_tag
+
+    @web_tag.setter
+    def web_tag(self, web_tag):
+        r"""Sets the web_tag of this CreateHostResponse.
+
+        网站名称，对应WAF控制台域名详情中的网站名称
+
+        :param web_tag: The web_tag of this CreateHostResponse.
+        :type web_tag: str
+        """
+        self._web_tag = web_tag
+
+    @property
+    def http2_enable(self):
+        r"""Gets the http2_enable of this CreateHostResponse.
+
+        是否支持http2   - true：表示支持http2   - false：表示不支持http2
+
+        :return: The http2_enable of this CreateHostResponse.
+        :rtype: bool
+        """
+        return self._http2_enable
+
+    @http2_enable.setter
+    def http2_enable(self, http2_enable):
+        r"""Sets the http2_enable of this CreateHostResponse.
+
+        是否支持http2   - true：表示支持http2   - false：表示不支持http2
+
+        :param http2_enable: The http2_enable of this CreateHostResponse.
+        :type http2_enable: bool
+        """
+        self._http2_enable = http2_enable
+
+    @property
+    def block_page(self):
+        r"""Gets the block_page of this CreateHostResponse.
+
+        :return: The block_page of this CreateHostResponse.
+        :rtype: :class:`huaweicloudsdkwaf.v1.BlockPage`
+        """
+        return self._block_page
+
+    @block_page.setter
+    def block_page(self, block_page):
+        r"""Sets the block_page of this CreateHostResponse.
+
+        :param block_page: The block_page of this CreateHostResponse.
+        :type block_page: :class:`huaweicloudsdkwaf.v1.BlockPage`
+        """
+        self._block_page = block_page
+
+    @property
+    def flag(self):
+        r"""Gets the flag of this CreateHostResponse.
+
+        :return: The flag of this CreateHostResponse.
+        :rtype: :class:`huaweicloudsdkwaf.v1.Flag`
+        """
+        return self._flag
+
+    @flag.setter
+    def flag(self, flag):
+        r"""Sets the flag of this CreateHostResponse.
+
+        :param flag: The flag of this CreateHostResponse.
+        :type flag: :class:`huaweicloudsdkwaf.v1.Flag`
+        """
+        self._flag = flag
+
+    @property
+    def extend(self):
+        r"""Gets the extend of this CreateHostResponse.
+
+        扩展字段，用于保存防护域名的一些配置信息。
+
+        :return: The extend of this CreateHostResponse.
+        :rtype: dict(str, str)
+        """
+        return self._extend
+
+    @extend.setter
+    def extend(self, extend):
+        r"""Sets the extend of this CreateHostResponse.
+
+        扩展字段，用于保存防护域名的一些配置信息。
+
+        :param extend: The extend of this CreateHostResponse.
+        :type extend: dict(str, str)
+        """
+        self._extend = extend
+
+    @property
+    def forward_header_map(self):
+        r"""Gets the forward_header_map of this CreateHostResponse.
+
+        字段转发配置，WAF会将添加的字段插到header中，转给源站；Key不能跟nginx原生字段重复。Value支持的值包括:   - $time_local   - $request_id   - $connection_requests   - $tenant_id   - $project_id   - $remote_addr   - $remote_port   - $scheme   - $request_method   - $http_host   -$origin_uri   - $request_length   - $ssl_server_name   - $ssl_protocol   - $ssl_curves   - $ssl_session_reused
+
+        :return: The forward_header_map of this CreateHostResponse.
+        :rtype: dict(str, str)
+        """
+        return self._forward_header_map
+
+    @forward_header_map.setter
+    def forward_header_map(self, forward_header_map):
+        r"""Sets the forward_header_map of this CreateHostResponse.
+
+        字段转发配置，WAF会将添加的字段插到header中，转给源站；Key不能跟nginx原生字段重复。Value支持的值包括:   - $time_local   - $request_id   - $connection_requests   - $tenant_id   - $project_id   - $remote_addr   - $remote_port   - $scheme   - $request_method   - $http_host   -$origin_uri   - $request_length   - $ssl_server_name   - $ssl_protocol   - $ssl_curves   - $ssl_session_reused
+
+        :param forward_header_map: The forward_header_map of this CreateHostResponse.
+        :type forward_header_map: dict(str, str)
+        """
+        self._forward_header_map = forward_header_map
+
+    def to_dict(self):
+        import warnings
+        warnings.warn("CreateHostResponse.to_dict() is deprecated and no longer maintained, "
+                      "use to_json_object() to get the response content.", DeprecationWarning)
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, CreateHostResponse):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

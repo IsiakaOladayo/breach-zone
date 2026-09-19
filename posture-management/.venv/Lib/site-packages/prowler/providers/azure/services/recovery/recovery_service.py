@@ -1,0 +1,190 @@
+from typing import Optional
+
+from azure.mgmt.recoveryservices import RecoveryServicesClient
+from azure.mgmt.recoveryservicesbackup import RecoveryServicesBackupClient
+from azure.mgmt.recoveryservicesbackup.activestamp.models import DataSourceType
+from pydantic import BaseModel, Field
+
+from prowler.lib.logger import logger
+from prowler.providers.azure.azure_provider import AzureProvider
+from prowler.providers.azure.lib.service.service import AzureService
+
+
+class BackupItem(BaseModel):
+    """Model that represents a backup item."""
+
+    id: str
+    name: str
+    workload_type: Optional[DataSourceType]
+    backup_policy_id: Optional[str] = None
+
+
+class BackupPolicy(BaseModel):
+    """Model that represents a backup policy."""
+
+    id: str
+    name: str
+    retention_days: Optional[int] = None
+
+
+class BackupVault(BaseModel):
+    """Model that represents a backup vault."""
+
+    id: str
+    name: str
+    location: str
+    backup_protected_items: dict[str, BackupItem] = Field(default_factory=dict)
+    backup_policies: dict[str, BackupPolicy] = Field(default_factory=dict)
+
+
+class Recovery(AzureService):
+    def __init__(self, provider: AzureProvider):
+        super().__init__(RecoveryServicesClient, provider)
+        self.vaults: dict[str, dict[str, BackupVault]] = self._get_vaults()
+        RecoveryBackup(provider, self.vaults)
+
+    def _get_vaults(self) -> dict[str, dict[str, BackupVault]]:
+        """
+        Retrieve all Recovery Services vaults for each subscription.
+
+        Returns:
+            Nested dictionary of vaults by subscription.
+        """
+        logger.info("Recovery - Getting Recovery Services vaults...")
+        vaults_dict: dict[str, dict[str, BackupVault]] = {}
+        subscription_id = "unknown"
+        try:
+            vaults_dict: dict[str, dict[str, BackupVault]] = {}
+            for subscription_id, client in self.clients.items():
+                vaults_list = self.list_with_rg_scope(
+                    subscription_id,
+                    client.vaults.list_by_subscription_id,
+                    client.vaults.list_by_resource_group,
+                )
+
+                vaults_dict[subscription_id] = {}
+                for vault in vaults_list:
+                    vault_obj = BackupVault(
+                        id=vault.id,
+                        name=vault.name,
+                        location=vault.location,
+                    )
+                    vaults_dict[subscription_id][vault_obj.id] = vault_obj
+        except Exception as error:
+            logger.error(
+                f"Subscription ID: {subscription_id} -- "
+                f"{error.__class__.__name__}"
+                f"[{error.__traceback__.tb_lineno}]: {error}"
+            )
+        return vaults_dict
+
+
+class RecoveryBackup(AzureService):
+    """
+    Service wrapper for Azure Recovery Services backup data.
+
+    Collects the backup protected items and backup policies for each Recovery
+    Services vault discovered by the Recovery service.
+    """
+
+    def __init__(
+        self,
+        provider: AzureProvider,
+        vaults: dict[str, dict[str, BackupVault]],
+    ):
+        super().__init__(RecoveryServicesBackupClient, provider)
+        for subscription_id, vaults in vaults.items():
+            for vault in vaults.values():
+                protected_items = self._get_backup_protected_items(
+                    subscription_id=subscription_id, vault=vault
+                )
+                vault.backup_protected_items = protected_items
+                vault.backup_policies = self._get_backup_policies(
+                    subscription_id=subscription_id, vault=vault
+                )
+
+    def _get_backup_protected_items(
+        self, subscription_id: str, vault: BackupVault
+    ) -> dict[str, BackupItem]:
+        """
+        Retrieve all backup protected items for a given vault.
+        """
+        logger.info("Recovery - Getting backup protected items...")
+        backup_protected_items_dict: dict[str, BackupItem] = {}
+        try:
+            backup_protected_items = self.clients[
+                subscription_id
+            ].backup_protected_items.list(
+                vault_name=vault.name,
+                resource_group_name=vault.id.split("/")[4],
+            )
+            for item in backup_protected_items:
+                item_properties = getattr(item, "properties", None)
+                workload_type = None
+                backup_policy_id = None
+                if item_properties:
+                    workload_type = item_properties.workload_type
+                    backup_policy_id = item_properties.policy_id
+                backup_protected_items_dict[item.id] = BackupItem(
+                    id=item.id,
+                    name=item.name,
+                    workload_type=workload_type,
+                    backup_policy_id=backup_policy_id,
+                )
+        except Exception as error:
+            logger.error(
+                f"Subscription ID: {subscription_id} -- "
+                f"{error.__class__.__name__}"
+                f"[{error.__traceback__.tb_lineno}]: {error}"
+            )
+        return backup_protected_items_dict
+
+    def _get_backup_policies(
+        self, subscription_id: str, vault: BackupVault
+    ) -> dict[str, BackupPolicy]:
+        """
+        Retrieve all backup policies for a given vault.
+        """
+        logger.info("Recovery - Getting backup policies...")
+        backup_policies_dict: dict[str, BackupPolicy] = {}
+        try:
+            client = self.clients[subscription_id]
+            backup_policies = client.backup_policies.list(
+                vault_name=vault.name,
+                resource_group_name=vault.id.split("/")[4],
+            )
+            for policy in backup_policies:
+                retention_days = self._get_backup_policy_retention_days(policy)
+                backup_policies_dict[policy.id] = BackupPolicy(
+                    id=policy.id,
+                    name=policy.name,
+                    retention_days=retention_days,
+                )
+        except Exception as error:
+            logger.error(
+                f"Subscription ID: {subscription_id} -- "
+                f"{error.__class__.__name__}"
+                f"[{error.__traceback__.tb_lineno}]: {error}"
+            )
+        return backup_policies_dict
+
+    @staticmethod
+    def _get_backup_policy_retention_days(policy) -> Optional[int]:
+        """Return the daily retention duration count for a backup policy."""
+        return getattr(
+            getattr(
+                getattr(
+                    getattr(
+                        getattr(policy, "properties", None),
+                        "retention_policy",
+                        None,
+                    ),
+                    "daily_schedule",
+                    None,
+                ),
+                "retention_duration",
+                None,
+            ),
+            "count",
+            None,
+        )

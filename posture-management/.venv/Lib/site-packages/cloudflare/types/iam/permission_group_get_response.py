@@ -1,0 +1,24 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import Optional
+
+from ..._models import BaseModel
+
+__all__ = ["PermissionGroupGetResponse", "Meta"]
+
+
+class Meta(BaseModel):
+    key: Optional[str] = None
+
+    value: Optional[str] = None
+
+
+class PermissionGroupGetResponse(BaseModel):
+    id: str
+    """Identifier of the permission group."""
+
+    meta: Optional[Meta] = None
+    """Attributes associated to the permission group."""
+
+    name: Optional[str] = None
+    """Name of the permission group."""

@@ -1,0 +1,392 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class CreatePoolReq:
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'protocol': 'str',
+        'lb_algorithm': 'str',
+        'loadbalancer_id': 'str',
+        'listener_id': 'str',
+        'tenant_id': 'str',
+        'name': 'str',
+        'description': 'str',
+        'admin_state_up': 'bool',
+        'session_persistence': 'SessionPersistence',
+        'protection_status': 'str',
+        'protection_reason': 'str'
+    }
+
+    attribute_map = {
+        'protocol': 'protocol',
+        'lb_algorithm': 'lb_algorithm',
+        'loadbalancer_id': 'loadbalancer_id',
+        'listener_id': 'listener_id',
+        'tenant_id': 'tenant_id',
+        'name': 'name',
+        'description': 'description',
+        'admin_state_up': 'admin_state_up',
+        'session_persistence': 'session_persistence',
+        'protection_status': 'protection_status',
+        'protection_reason': 'protection_reason'
+    }
+
+    def __init__(self, protocol=None, lb_algorithm=None, loadbalancer_id=None, listener_id=None, tenant_id=None, name=None, description=None, admin_state_up=None, session_persistence=None, protection_status=None, protection_reason=None):
+        r"""CreatePoolReq
+
+        The model defined in huaweicloud sdk
+
+        :param protocol: 后端云服务器组的后端协议。取值：UDP、TCP、HTTP。当指定istener_id创建后端云服务器组时，后端云服务器组的protocol和它关联的监听器的protocol有如下关系：监听器的protocol为TCP时，后端云服务器组的protocol必须为TCP。监听器的protocol为UDP时，后端云服务器组的protocol必须为UDP。监听器的protocol为HTTP或TERMINATED_HTTPS时，后端云服务器组的protocol必须为HTTP。
+        :type protocol: str
+        :param lb_algorithm: 后端云服务器组的负载均衡算法，取值：ROUND_ROBIN：加权轮询算法；LEAST_CONNECTIONS：加权最少连接算法；SOURCE_IP：源IP算法；当该字段的取值为SOURCE_IP时，后端云服务器组绑定的后端云服务器的weight字段无效。
+        :type lb_algorithm: str
+        :param loadbalancer_id: 后端云服务器组关联的负载均衡器ID。listener_id和loadbalancer_id中至少指定一个。
+        :type loadbalancer_id: str
+        :param listener_id: 后端云服务器组关联的监听器的ID。listener_id和loadbalancer_id中至少指定一个。
+        :type listener_id: str
+        :param tenant_id: 后端云服务器组所在的项目ID。
+        :type tenant_id: str
+        :param name: 后端云服务器组的名称。
+        :type name: str
+        :param description: 后端云服务器组的描述信息
+        :type description: str
+        :param admin_state_up: 后端云服务器组的管理状态。只支持设定为true，该字段的值无实际意义。
+        :type admin_state_up: bool
+        :param session_persistence: 
+        :type session_persistence: :class:`huaweicloudsdkelb.v2.SessionPersistence`
+        :param protection_status: 修改保护状态, 取值： - nonProtection: 不保护，默认值为nonProtection - consoleProtection: 控制台修改保护
+        :type protection_status: str
+        :param protection_reason: 设置保护的原因 &gt;仅当protection_status为consoleProtection时有效。
+        :type protection_reason: str
+        """
+        
+        
+
+        self._protocol = None
+        self._lb_algorithm = None
+        self._loadbalancer_id = None
+        self._listener_id = None
+        self._tenant_id = None
+        self._name = None
+        self._description = None
+        self._admin_state_up = None
+        self._session_persistence = None
+        self._protection_status = None
+        self._protection_reason = None
+        self.discriminator = None
+
+        self.protocol = protocol
+        self.lb_algorithm = lb_algorithm
+        if loadbalancer_id is not None:
+            self.loadbalancer_id = loadbalancer_id
+        if listener_id is not None:
+            self.listener_id = listener_id
+        if tenant_id is not None:
+            self.tenant_id = tenant_id
+        if name is not None:
+            self.name = name
+        if description is not None:
+            self.description = description
+        if admin_state_up is not None:
+            self.admin_state_up = admin_state_up
+        if session_persistence is not None:
+            self.session_persistence = session_persistence
+        if protection_status is not None:
+            self.protection_status = protection_status
+        if protection_reason is not None:
+            self.protection_reason = protection_reason
+
+    @property
+    def protocol(self):
+        r"""Gets the protocol of this CreatePoolReq.
+
+        后端云服务器组的后端协议。取值：UDP、TCP、HTTP。当指定istener_id创建后端云服务器组时，后端云服务器组的protocol和它关联的监听器的protocol有如下关系：监听器的protocol为TCP时，后端云服务器组的protocol必须为TCP。监听器的protocol为UDP时，后端云服务器组的protocol必须为UDP。监听器的protocol为HTTP或TERMINATED_HTTPS时，后端云服务器组的protocol必须为HTTP。
+
+        :return: The protocol of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._protocol
+
+    @protocol.setter
+    def protocol(self, protocol):
+        r"""Sets the protocol of this CreatePoolReq.
+
+        后端云服务器组的后端协议。取值：UDP、TCP、HTTP。当指定istener_id创建后端云服务器组时，后端云服务器组的protocol和它关联的监听器的protocol有如下关系：监听器的protocol为TCP时，后端云服务器组的protocol必须为TCP。监听器的protocol为UDP时，后端云服务器组的protocol必须为UDP。监听器的protocol为HTTP或TERMINATED_HTTPS时，后端云服务器组的protocol必须为HTTP。
+
+        :param protocol: The protocol of this CreatePoolReq.
+        :type protocol: str
+        """
+        self._protocol = protocol
+
+    @property
+    def lb_algorithm(self):
+        r"""Gets the lb_algorithm of this CreatePoolReq.
+
+        后端云服务器组的负载均衡算法，取值：ROUND_ROBIN：加权轮询算法；LEAST_CONNECTIONS：加权最少连接算法；SOURCE_IP：源IP算法；当该字段的取值为SOURCE_IP时，后端云服务器组绑定的后端云服务器的weight字段无效。
+
+        :return: The lb_algorithm of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._lb_algorithm
+
+    @lb_algorithm.setter
+    def lb_algorithm(self, lb_algorithm):
+        r"""Sets the lb_algorithm of this CreatePoolReq.
+
+        后端云服务器组的负载均衡算法，取值：ROUND_ROBIN：加权轮询算法；LEAST_CONNECTIONS：加权最少连接算法；SOURCE_IP：源IP算法；当该字段的取值为SOURCE_IP时，后端云服务器组绑定的后端云服务器的weight字段无效。
+
+        :param lb_algorithm: The lb_algorithm of this CreatePoolReq.
+        :type lb_algorithm: str
+        """
+        self._lb_algorithm = lb_algorithm
+
+    @property
+    def loadbalancer_id(self):
+        r"""Gets the loadbalancer_id of this CreatePoolReq.
+
+        后端云服务器组关联的负载均衡器ID。listener_id和loadbalancer_id中至少指定一个。
+
+        :return: The loadbalancer_id of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._loadbalancer_id
+
+    @loadbalancer_id.setter
+    def loadbalancer_id(self, loadbalancer_id):
+        r"""Sets the loadbalancer_id of this CreatePoolReq.
+
+        后端云服务器组关联的负载均衡器ID。listener_id和loadbalancer_id中至少指定一个。
+
+        :param loadbalancer_id: The loadbalancer_id of this CreatePoolReq.
+        :type loadbalancer_id: str
+        """
+        self._loadbalancer_id = loadbalancer_id
+
+    @property
+    def listener_id(self):
+        r"""Gets the listener_id of this CreatePoolReq.
+
+        后端云服务器组关联的监听器的ID。listener_id和loadbalancer_id中至少指定一个。
+
+        :return: The listener_id of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._listener_id
+
+    @listener_id.setter
+    def listener_id(self, listener_id):
+        r"""Sets the listener_id of this CreatePoolReq.
+
+        后端云服务器组关联的监听器的ID。listener_id和loadbalancer_id中至少指定一个。
+
+        :param listener_id: The listener_id of this CreatePoolReq.
+        :type listener_id: str
+        """
+        self._listener_id = listener_id
+
+    @property
+    def tenant_id(self):
+        r"""Gets the tenant_id of this CreatePoolReq.
+
+        后端云服务器组所在的项目ID。
+
+        :return: The tenant_id of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._tenant_id
+
+    @tenant_id.setter
+    def tenant_id(self, tenant_id):
+        r"""Sets the tenant_id of this CreatePoolReq.
+
+        后端云服务器组所在的项目ID。
+
+        :param tenant_id: The tenant_id of this CreatePoolReq.
+        :type tenant_id: str
+        """
+        self._tenant_id = tenant_id
+
+    @property
+    def name(self):
+        r"""Gets the name of this CreatePoolReq.
+
+        后端云服务器组的名称。
+
+        :return: The name of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        r"""Sets the name of this CreatePoolReq.
+
+        后端云服务器组的名称。
+
+        :param name: The name of this CreatePoolReq.
+        :type name: str
+        """
+        self._name = name
+
+    @property
+    def description(self):
+        r"""Gets the description of this CreatePoolReq.
+
+        后端云服务器组的描述信息
+
+        :return: The description of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        r"""Sets the description of this CreatePoolReq.
+
+        后端云服务器组的描述信息
+
+        :param description: The description of this CreatePoolReq.
+        :type description: str
+        """
+        self._description = description
+
+    @property
+    def admin_state_up(self):
+        r"""Gets the admin_state_up of this CreatePoolReq.
+
+        后端云服务器组的管理状态。只支持设定为true，该字段的值无实际意义。
+
+        :return: The admin_state_up of this CreatePoolReq.
+        :rtype: bool
+        """
+        return self._admin_state_up
+
+    @admin_state_up.setter
+    def admin_state_up(self, admin_state_up):
+        r"""Sets the admin_state_up of this CreatePoolReq.
+
+        后端云服务器组的管理状态。只支持设定为true，该字段的值无实际意义。
+
+        :param admin_state_up: The admin_state_up of this CreatePoolReq.
+        :type admin_state_up: bool
+        """
+        self._admin_state_up = admin_state_up
+
+    @property
+    def session_persistence(self):
+        r"""Gets the session_persistence of this CreatePoolReq.
+
+        :return: The session_persistence of this CreatePoolReq.
+        :rtype: :class:`huaweicloudsdkelb.v2.SessionPersistence`
+        """
+        return self._session_persistence
+
+    @session_persistence.setter
+    def session_persistence(self, session_persistence):
+        r"""Sets the session_persistence of this CreatePoolReq.
+
+        :param session_persistence: The session_persistence of this CreatePoolReq.
+        :type session_persistence: :class:`huaweicloudsdkelb.v2.SessionPersistence`
+        """
+        self._session_persistence = session_persistence
+
+    @property
+    def protection_status(self):
+        r"""Gets the protection_status of this CreatePoolReq.
+
+        修改保护状态, 取值： - nonProtection: 不保护，默认值为nonProtection - consoleProtection: 控制台修改保护
+
+        :return: The protection_status of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._protection_status
+
+    @protection_status.setter
+    def protection_status(self, protection_status):
+        r"""Sets the protection_status of this CreatePoolReq.
+
+        修改保护状态, 取值： - nonProtection: 不保护，默认值为nonProtection - consoleProtection: 控制台修改保护
+
+        :param protection_status: The protection_status of this CreatePoolReq.
+        :type protection_status: str
+        """
+        self._protection_status = protection_status
+
+    @property
+    def protection_reason(self):
+        r"""Gets the protection_reason of this CreatePoolReq.
+
+        设置保护的原因 >仅当protection_status为consoleProtection时有效。
+
+        :return: The protection_reason of this CreatePoolReq.
+        :rtype: str
+        """
+        return self._protection_reason
+
+    @protection_reason.setter
+    def protection_reason(self, protection_reason):
+        r"""Sets the protection_reason of this CreatePoolReq.
+
+        设置保护的原因 >仅当protection_status为consoleProtection时有效。
+
+        :param protection_reason: The protection_reason of this CreatePoolReq.
+        :type protection_reason: str
+        """
+        self._protection_reason = protection_reason
+
+    def to_dict(self):
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, CreatePoolReq):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

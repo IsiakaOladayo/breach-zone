@@ -1,0 +1,52 @@
+from azure.mgmt.applicationinsights import ApplicationInsightsManagementClient
+from pydantic.v1 import BaseModel
+
+from prowler.lib.logger import logger
+from prowler.providers.azure.azure_provider import AzureProvider
+from prowler.providers.azure.lib.service.service import AzureService
+
+
+class AppInsights(AzureService):
+    def __init__(self, provider: AzureProvider):
+        super().__init__(ApplicationInsightsManagementClient, provider)
+        self.components = self._get_components()
+
+    def _get_components(self):
+        logger.info("AppInsights - Getting components...")
+        components = {}
+
+        for subscription_id, client in self.clients.items():
+            try:
+                components.update({subscription_id: {}})
+                components_list = self.list_with_rg_scope(
+                    subscription_id,
+                    client.components.list,
+                    client.components.list_by_resource_group,
+                )
+
+                for component in components_list:
+                    components[subscription_id].update(
+                        {
+                            component.app_id: Component(
+                                resource_id=component.id,
+                                resource_name=component.name,
+                                location=component.location,
+                                instrumentation_key=getattr(
+                                    component, "instrumentation_key", "Not Found"
+                                ),
+                            )
+                        }
+                    )
+            except Exception as error:
+                logger.error(
+                    f"Subscription ID: {subscription_id} -- {error.__class__.__name__}[{error.__traceback__.tb_lineno}]: {error}"
+                )
+
+        return components
+
+
+class Component(BaseModel):
+    resource_id: str
+    resource_name: str
+    location: str
+    instrumentation_key: str

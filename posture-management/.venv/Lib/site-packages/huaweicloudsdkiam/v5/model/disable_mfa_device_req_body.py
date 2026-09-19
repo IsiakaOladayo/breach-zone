@@ -1,0 +1,135 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class DisableMfaDeviceReqBody:
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'user_id': 'str',
+        'serial_number': 'str'
+    }
+
+    attribute_map = {
+        'user_id': 'user_id',
+        'serial_number': 'serial_number'
+    }
+
+    def __init__(self, user_id=None, serial_number=None):
+        r"""DisableMfaDeviceReqBody
+
+        The model defined in huaweicloud sdk
+
+        :param user_id: IAM用户ID。
+        :type user_id: str
+        :param serial_number: MFA设备序列号。
+        :type serial_number: str
+        """
+        
+        
+
+        self._user_id = None
+        self._serial_number = None
+        self.discriminator = None
+
+        self.user_id = user_id
+        self.serial_number = serial_number
+
+    @property
+    def user_id(self):
+        r"""Gets the user_id of this DisableMfaDeviceReqBody.
+
+        IAM用户ID。
+
+        :return: The user_id of this DisableMfaDeviceReqBody.
+        :rtype: str
+        """
+        return self._user_id
+
+    @user_id.setter
+    def user_id(self, user_id):
+        r"""Sets the user_id of this DisableMfaDeviceReqBody.
+
+        IAM用户ID。
+
+        :param user_id: The user_id of this DisableMfaDeviceReqBody.
+        :type user_id: str
+        """
+        self._user_id = user_id
+
+    @property
+    def serial_number(self):
+        r"""Gets the serial_number of this DisableMfaDeviceReqBody.
+
+        MFA设备序列号。
+
+        :return: The serial_number of this DisableMfaDeviceReqBody.
+        :rtype: str
+        """
+        return self._serial_number
+
+    @serial_number.setter
+    def serial_number(self, serial_number):
+        r"""Sets the serial_number of this DisableMfaDeviceReqBody.
+
+        MFA设备序列号。
+
+        :param serial_number: The serial_number of this DisableMfaDeviceReqBody.
+        :type serial_number: str
+        """
+        self._serial_number = serial_number
+
+    def to_dict(self):
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, DisableMfaDeviceReqBody):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other
