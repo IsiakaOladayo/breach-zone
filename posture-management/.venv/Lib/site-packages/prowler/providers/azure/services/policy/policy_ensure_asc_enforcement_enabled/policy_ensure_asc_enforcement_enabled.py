@@ -1,0 +1,27 @@
+from prowler.lib.check.models import Check, Check_Report_Azure
+from prowler.providers.azure.services.policy.policy_client import policy_client
+
+
+class policy_ensure_asc_enforcement_enabled(Check):
+    def execute(self) -> Check_Report_Azure:
+        findings = []
+
+        for subscription_id, policies in policy_client.policy_assigments.items():
+            subscription_name = policy_client.subscriptions.get(
+                subscription_id, subscription_id
+            )
+            if "SecurityCenterBuiltIn" in policies:
+                report = Check_Report_Azure(
+                    metadata=self.metadata(),
+                    resource=policies["SecurityCenterBuiltIn"],
+                )
+                report.subscription = subscription_id
+                report.status = "PASS"
+                report.status_extended = f"Policy assigment '{policies['SecurityCenterBuiltIn'].id}' from subscription {subscription_name} ({subscription_id}) is configured with enforcement mode '{policies['SecurityCenterBuiltIn'].enforcement_mode}'."
+                if policies["SecurityCenterBuiltIn"].enforcement_mode != "Default":
+                    report.status = "FAIL"
+                    report.status_extended = f"Policy assigment '{policies['SecurityCenterBuiltIn'].id}' from subscription {subscription_name} ({subscription_id}) is not configured with enforcement mode Default."
+
+                findings.append(report)
+
+        return findings

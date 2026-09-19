@@ -1,0 +1,6940 @@
+# coding: utf-8
+
+from __future__ import absolute_import
+
+import importlib
+import warnings
+
+from huaweicloudsdkcore.client import Client, ClientBuilder
+from huaweicloudsdkcore.utils import http_utils
+from huaweicloudsdkcore.sdk_stream_request import SdkStreamRequest
+
+try:
+    from huaweicloudsdkcore.invoker.invoker import SyncInvoker
+except ImportError as e:
+    warnings.warn(str(e) + ", please check if you are using the same versions of 'huaweicloudsdkcore' and 'huaweicloudsdkvpc'")
+
+
+class VpcClient(Client):
+    def __init__(self):
+        super().__init__()
+        self.model_package = importlib.import_module("huaweicloudsdkvpc.v3.model")
+
+    @classmethod
+    def new_builder(cls, clazz=None):
+        if not clazz:
+            client_builder = ClientBuilder(cls)
+        else:
+            if clazz.__name__ != "VpcClient":
+                raise TypeError("client type error, support client type is VpcClient")
+            client_builder = ClientBuilder(clazz)
+
+        
+
+        return client_builder
+
+    def add_security_groups(self, request):
+        r"""端口插入安全组
+
+        端口插入安全组
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for AddSecurityGroups
+        :type request: :class:`huaweicloudsdkvpc.v3.AddSecurityGroupsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.AddSecurityGroupsResponse`
+        """
+        http_info = self._add_security_groups_http_info(request)
+        return self._call_api(**http_info)
+
+    def add_security_groups_invoker(self, request):
+        http_info = self._add_security_groups_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _add_security_groups_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/insert-security-groups",
+            "request_type": request.__class__.__name__,
+            "response_type": "AddSecurityGroupsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def add_sources_to_traffic_mirror_session(self, request):
+        r"""流量镜像会话添加镜像源
+
+        流量镜像会话添加镜像源
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for AddSourcesToTrafficMirrorSession
+        :type request: :class:`huaweicloudsdkvpc.v3.AddSourcesToTrafficMirrorSessionRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.AddSourcesToTrafficMirrorSessionResponse`
+        """
+        http_info = self._add_sources_to_traffic_mirror_session_http_info(request)
+        return self._call_api(**http_info)
+
+    def add_sources_to_traffic_mirror_session_invoker(self, request):
+        http_info = self._add_sources_to_traffic_mirror_session_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _add_sources_to_traffic_mirror_session_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions/{traffic_mirror_session_id}/add-sources",
+            "request_type": request.__class__.__name__,
+            "response_type": "AddSourcesToTrafficMirrorSessionResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_session_id' in local_var_params:
+            path_params['traffic_mirror_session_id'] = local_var_params['traffic_mirror_session_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_create_port_tags(self, request):
+        r"""批量添加端口资源标签
+
+        为指定的端口批量添加标签。
+        此接口为幂等接口：创建时如果请求体中存在重复key则报错。创建时，不允许设置重复key数据，如果数据库已存在该key，就覆盖value的值。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchCreatePortTags
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchCreatePortTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchCreatePortTagsResponse`
+        """
+        http_info = self._batch_create_port_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_create_port_tags_invoker(self, request):
+        http_info = self._batch_create_port_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_create_port_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/tags/create",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchCreatePortTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_create_security_group_rules(self, request):
+        r"""批量创建安全组规则
+
+        在特定安全组下批量创建安全组规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchCreateSecurityGroupRules
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchCreateSecurityGroupRulesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchCreateSecurityGroupRulesResponse`
+        """
+        http_info = self._batch_create_security_group_rules_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_create_security_group_rules_invoker(self, request):
+        http_info = self._batch_create_security_group_rules_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_create_security_group_rules_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/security-groups/{security_group_id}/security-group-rules/batch-create",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchCreateSecurityGroupRulesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'security_group_id' in local_var_params:
+            path_params['security_group_id'] = local_var_params['security_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_create_sub_network_interface(self, request):
+        r"""批量创建辅助弹性网卡
+
+        批量创建辅助弹性网卡
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchCreateSubNetworkInterface
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchCreateSubNetworkInterfaceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchCreateSubNetworkInterfaceResponse`
+        """
+        http_info = self._batch_create_sub_network_interface_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_create_sub_network_interface_invoker(self, request):
+        http_info = self._batch_create_sub_network_interface_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_create_sub_network_interface_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces/batch-create",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchCreateSubNetworkInterfaceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_delete_port_tags(self, request):
+        r"""批量删除端口资源标签
+
+        为指定的端口资源实例批量删除标签。
+        此接口为幂等接口：删除时，如果删除的标签不存在，默认处理成功；删除时不对标签字符集范围做校验。删除时tags结构体不能缺失，key不能为空，或者空字符串。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchDeletePortTags
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchDeletePortTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchDeletePortTagsResponse`
+        """
+        http_info = self._batch_delete_port_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_delete_port_tags_invoker(self, request):
+        http_info = self._batch_delete_port_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_delete_port_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/tags/delete",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchDeletePortTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def count_ports_by_tags(self, request):
+        r"""查询端口资源实例数量
+
+        使用标签过滤查询端口实例数量。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CountPortsByTags
+        :type request: :class:`huaweicloudsdkvpc.v3.CountPortsByTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CountPortsByTagsResponse`
+        """
+        http_info = self._count_ports_by_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def count_ports_by_tags_invoker(self, request):
+        http_info = self._count_ports_by_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _count_ports_by_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/ports/resource-instances/count",
+            "request_type": request.__class__.__name__,
+            "response_type": "CountPortsByTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_port_tag(self, request):
+        r"""添加端口资源标签
+
+        给指定端口资源实例增加标签信息。
+        此接口为幂等接口：创建时，如果创建的标签已经存在（key相同），则覆盖。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreatePortTag
+        :type request: :class:`huaweicloudsdkvpc.v3.CreatePortTagRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreatePortTagResponse`
+        """
+        http_info = self._create_port_tag_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_port_tag_invoker(self, request):
+        http_info = self._create_port_tag_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_port_tag_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreatePortTagResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_security_group(self, request):
+        r"""创建安全组
+
+        创建安全组
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateSecurityGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateSecurityGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateSecurityGroupResponse`
+        """
+        http_info = self._create_security_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_security_group_invoker(self, request):
+        http_info = self._create_security_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_security_group_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/security-groups",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateSecurityGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_security_group_rule(self, request):
+        r"""创建安全组规则
+
+        创建安全组规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateSecurityGroupRule
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateSecurityGroupRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateSecurityGroupRuleResponse`
+        """
+        http_info = self._create_security_group_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_security_group_rule_invoker(self, request):
+        http_info = self._create_security_group_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_security_group_rule_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/security-group-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateSecurityGroupRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_sub_network_interface(self, request):
+        r"""创建辅助弹性网卡
+
+        创建辅助弹性网卡
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateSubNetworkInterface
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateSubNetworkInterfaceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateSubNetworkInterfaceResponse`
+        """
+        http_info = self._create_sub_network_interface_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_sub_network_interface_invoker(self, request):
+        http_info = self._create_sub_network_interface_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_sub_network_interface_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateSubNetworkInterfaceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_traffic_mirror_filter(self, request):
+        r"""创建流量镜像筛选条件
+
+        创建流量镜像筛选条件
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateTrafficMirrorFilter
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateTrafficMirrorFilterRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateTrafficMirrorFilterResponse`
+        """
+        http_info = self._create_traffic_mirror_filter_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_traffic_mirror_filter_invoker(self, request):
+        http_info = self._create_traffic_mirror_filter_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_traffic_mirror_filter_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filters",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateTrafficMirrorFilterResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_traffic_mirror_filter_rule(self, request):
+        r"""创建流量镜像筛选规则
+
+        创建流量镜像筛选规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateTrafficMirrorFilterRule
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateTrafficMirrorFilterRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateTrafficMirrorFilterRuleResponse`
+        """
+        http_info = self._create_traffic_mirror_filter_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_traffic_mirror_filter_rule_invoker(self, request):
+        http_info = self._create_traffic_mirror_filter_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_traffic_mirror_filter_rule_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filter-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateTrafficMirrorFilterRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_traffic_mirror_session(self, request):
+        r"""创建流量镜像会话
+
+        创建流量镜像会话
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateTrafficMirrorSession
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateTrafficMirrorSessionRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateTrafficMirrorSessionResponse`
+        """
+        http_info = self._create_traffic_mirror_session_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_traffic_mirror_session_invoker(self, request):
+        http_info = self._create_traffic_mirror_session_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_traffic_mirror_session_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateTrafficMirrorSessionResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_virsubnet_cidr_reservation(self, request):
+        r"""创建子网预留网段
+
+        子网预留网段是子网网段范围的IP网段，此IP网段内的IP不会被子网内的实例占用。用户可以通过创建子网预留网段来预留某个IP网段，用于后续的特殊场景使用。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateVirsubnetCidrReservation
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateVirsubnetCidrReservationRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateVirsubnetCidrReservationResponse`
+        """
+        http_info = self._create_virsubnet_cidr_reservation_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_virsubnet_cidr_reservation_invoker(self, request):
+        http_info = self._create_virsubnet_cidr_reservation_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_virsubnet_cidr_reservation_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/virsubnet-cidr-reservations",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateVirsubnetCidrReservationResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_port_tag(self, request):
+        r"""删除端口资源标签
+
+        删除指定端口的标签信息。
+        该接口为幂等接口：删除的key不存在报404，key不能为空或者空字符串。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeletePortTag
+        :type request: :class:`huaweicloudsdkvpc.v3.DeletePortTagRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeletePortTagResponse`
+        """
+        http_info = self._delete_port_tag_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_port_tag_invoker(self, request):
+        http_info = self._delete_port_tag_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_port_tag_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/tags/{tag_key}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeletePortTagResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+        if 'tag_key' in local_var_params:
+            path_params['tag_key'] = local_var_params['tag_key']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_security_group(self, request):
+        r"""删除安全组
+
+        删除安全组
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteSecurityGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteSecurityGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteSecurityGroupResponse`
+        """
+        http_info = self._delete_security_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_security_group_invoker(self, request):
+        http_info = self._delete_security_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_security_group_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/security-groups/{security_group_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteSecurityGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'security_group_id' in local_var_params:
+            path_params['security_group_id'] = local_var_params['security_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_security_group_rule(self, request):
+        r"""删除安全组规则
+
+        删除安全组规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteSecurityGroupRule
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteSecurityGroupRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteSecurityGroupRuleResponse`
+        """
+        http_info = self._delete_security_group_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_security_group_rule_invoker(self, request):
+        http_info = self._delete_security_group_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_security_group_rule_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/security-group-rules/{security_group_rule_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteSecurityGroupRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'security_group_rule_id' in local_var_params:
+            path_params['security_group_rule_id'] = local_var_params['security_group_rule_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_sub_network_interface(self, request):
+        r"""删除辅助弹性网卡
+
+        删除辅助弹性网卡
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteSubNetworkInterface
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteSubNetworkInterfaceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteSubNetworkInterfaceResponse`
+        """
+        http_info = self._delete_sub_network_interface_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_sub_network_interface_invoker(self, request):
+        http_info = self._delete_sub_network_interface_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_sub_network_interface_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces/{sub_network_interface_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteSubNetworkInterfaceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'sub_network_interface_id' in local_var_params:
+            path_params['sub_network_interface_id'] = local_var_params['sub_network_interface_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_traffic_mirror_filter(self, request):
+        r"""删除流量镜像筛选条件
+
+        删除流量镜像筛选条件
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteTrafficMirrorFilter
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteTrafficMirrorFilterRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteTrafficMirrorFilterResponse`
+        """
+        http_info = self._delete_traffic_mirror_filter_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_traffic_mirror_filter_invoker(self, request):
+        http_info = self._delete_traffic_mirror_filter_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_traffic_mirror_filter_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filters/{traffic_mirror_filter_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteTrafficMirrorFilterResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_filter_id' in local_var_params:
+            path_params['traffic_mirror_filter_id'] = local_var_params['traffic_mirror_filter_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_traffic_mirror_filter_rule(self, request):
+        r"""删除流量镜像筛选规则
+
+        删除流量镜像筛选规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteTrafficMirrorFilterRule
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteTrafficMirrorFilterRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteTrafficMirrorFilterRuleResponse`
+        """
+        http_info = self._delete_traffic_mirror_filter_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_traffic_mirror_filter_rule_invoker(self, request):
+        http_info = self._delete_traffic_mirror_filter_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_traffic_mirror_filter_rule_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filter-rules/{traffic_mirror_filter_rule_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteTrafficMirrorFilterRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_filter_rule_id' in local_var_params:
+            path_params['traffic_mirror_filter_rule_id'] = local_var_params['traffic_mirror_filter_rule_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_traffic_mirror_session(self, request):
+        r"""删除流量镜像会话
+
+        删除流量镜像会话
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteTrafficMirrorSession
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteTrafficMirrorSessionRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteTrafficMirrorSessionResponse`
+        """
+        http_info = self._delete_traffic_mirror_session_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_traffic_mirror_session_invoker(self, request):
+        http_info = self._delete_traffic_mirror_session_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_traffic_mirror_session_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions/{traffic_mirror_session_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteTrafficMirrorSessionResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_session_id' in local_var_params:
+            path_params['traffic_mirror_session_id'] = local_var_params['traffic_mirror_session_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_virsubnet_cidr_reservation(self, request):
+        r"""删除子网预留网段
+
+        当您已创建的子网预留网段不再使用时，您可以通过调用该接口删除子网预留网段资源。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteVirsubnetCidrReservation
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteVirsubnetCidrReservationRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteVirsubnetCidrReservationResponse`
+        """
+        http_info = self._delete_virsubnet_cidr_reservation_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_virsubnet_cidr_reservation_invoker(self, request):
+        http_info = self._delete_virsubnet_cidr_reservation_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_virsubnet_cidr_reservation_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/virsubnet-cidr-reservations/{virsubnet_cidr_reservation_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteVirsubnetCidrReservationResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'virsubnet_cidr_reservation_id' in local_var_params:
+            path_params['virsubnet_cidr_reservation_id'] = local_var_params['virsubnet_cidr_reservation_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_port_tags(self, request):
+        r"""查询端口项目标签
+
+        查询租户在指定Project中实例类型的所有资源标签集合。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListPortTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListPortTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListPortTagsResponse`
+        """
+        http_info = self._list_port_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_port_tags_invoker(self, request):
+        http_info = self._list_port_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_port_tags_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/ports/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListPortTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'offset' in local_var_params:
+            query_params.append(('offset', local_var_params['offset']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_ports(self, request):
+        r"""查询端口列表
+
+        当您的端口创建成功后，您可以通过调用该接口查询所有端口信息，包括端口ID、IP地址、所属云服务实例等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListPorts
+        :type request: :class:`huaweicloudsdkvpc.v3.ListPortsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListPortsResponse`
+        """
+        http_info = self._list_ports_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_ports_invoker(self, request):
+        http_info = self._list_ports_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_ports_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/ports",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListPortsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'csv'
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'csv'
+        if 'admin_state_up' in local_var_params:
+            query_params.append(('admin_state_up', local_var_params['admin_state_up']))
+        if 'status' in local_var_params:
+            query_params.append(('status', local_var_params['status']))
+        if 'virsubnet_id' in local_var_params:
+            query_params.append(('virsubnet_id', local_var_params['virsubnet_id']))
+            collection_formats['virsubnet_id'] = 'csv'
+        if 'device_id' in local_var_params:
+            query_params.append(('device_id', local_var_params['device_id']))
+            collection_formats['device_id'] = 'csv'
+        if 'mac_address' in local_var_params:
+            query_params.append(('mac_address', local_var_params['mac_address']))
+            collection_formats['mac_address'] = 'csv'
+        if 'device_owner' in local_var_params:
+            query_params.append(('device_owner', local_var_params['device_owner']))
+            collection_formats['device_owner'] = 'csv'
+        if 'device_owner_prefixlike' in local_var_params:
+            query_params.append(('device_owner_prefixlike', local_var_params['device_owner_prefixlike']))
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'csv'
+        if 'bindinghost_id' in local_var_params:
+            query_params.append(('binding:host_id', local_var_params['bindinghost_id']))
+            collection_formats['binding:host_id'] = 'csv'
+        if 'private_ips' in local_var_params:
+            query_params.append(('private_ips', local_var_params['private_ips']))
+            collection_formats['private_ips'] = 'csv'
+        if 'security_groups' in local_var_params:
+            query_params.append(('security_groups', local_var_params['security_groups']))
+            collection_formats['security_groups'] = 'csv'
+        if 'vpc_id' in local_var_params:
+            query_params.append(('vpc_id', local_var_params['vpc_id']))
+            collection_formats['vpc_id'] = 'csv'
+        if 'allowed_address_pairs' in local_var_params:
+            query_params.append(('allowed_address_pairs', local_var_params['allowed_address_pairs']))
+            collection_formats['allowed_address_pairs'] = 'csv'
+        if 'instance_id' in local_var_params:
+            query_params.append(('instance_id', local_var_params['instance_id']))
+        if 'instance_type' in local_var_params:
+            query_params.append(('instance_type', local_var_params['instance_type']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_ports_by_tags(self, request):
+        r"""查询端口资源实例列表
+
+        使用标签过滤查询端口。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListPortsByTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListPortsByTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListPortsByTagsResponse`
+        """
+        http_info = self._list_ports_by_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_ports_by_tags_invoker(self, request):
+        http_info = self._list_ports_by_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_ports_by_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/ports/resource-instances/filter",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListPortsByTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'offset' in local_var_params:
+            query_params.append(('offset', local_var_params['offset']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_security_group_rules(self, request):
+        r"""查询安全组规则列表
+
+        查询安全组规则列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListSecurityGroupRules
+        :type request: :class:`huaweicloudsdkvpc.v3.ListSecurityGroupRulesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListSecurityGroupRulesResponse`
+        """
+        http_info = self._list_security_group_rules_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_security_group_rules_invoker(self, request):
+        http_info = self._list_security_group_rules_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_security_group_rules_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/security-group-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListSecurityGroupRulesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'security_group_id' in local_var_params:
+            query_params.append(('security_group_id', local_var_params['security_group_id']))
+            collection_formats['security_group_id'] = 'multi'
+        if 'protocol' in local_var_params:
+            query_params.append(('protocol', local_var_params['protocol']))
+            collection_formats['protocol'] = 'multi'
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'multi'
+        if 'remote_group_id' in local_var_params:
+            query_params.append(('remote_group_id', local_var_params['remote_group_id']))
+            collection_formats['remote_group_id'] = 'multi'
+        if 'direction' in local_var_params:
+            query_params.append(('direction', local_var_params['direction']))
+        if 'action' in local_var_params:
+            query_params.append(('action', local_var_params['action']))
+        if 'remote_ip_prefix' in local_var_params:
+            query_params.append(('remote_ip_prefix', local_var_params['remote_ip_prefix']))
+        if 'priority' in local_var_params:
+            query_params.append(('priority', local_var_params['priority']))
+            collection_formats['priority'] = 'csv'
+        if 'ethertype' in local_var_params:
+            query_params.append(('ethertype', local_var_params['ethertype']))
+            collection_formats['ethertype'] = 'csv'
+        if 'remote_address_group_id' in local_var_params:
+            query_params.append(('remote_address_group_id', local_var_params['remote_address_group_id']))
+            collection_formats['remote_address_group_id'] = 'csv'
+        if 'enabled' in local_var_params:
+            query_params.append(('enabled', local_var_params['enabled']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_security_groups(self, request):
+        r"""查询安全组列表
+
+        查询某租户下的安全组列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListSecurityGroups
+        :type request: :class:`huaweicloudsdkvpc.v3.ListSecurityGroupsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListSecurityGroupsResponse`
+        """
+        http_info = self._list_security_groups_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_security_groups_invoker(self, request):
+        http_info = self._list_security_groups_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_security_groups_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/security-groups",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListSecurityGroupsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'multi'
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'multi'
+        if 'enterprise_project_id' in local_var_params:
+            query_params.append(('enterprise_project_id', local_var_params['enterprise_project_id']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_sub_network_interfaces(self, request):
+        r"""查询租户下辅助弹性网卡列表
+
+        查询辅助弹性网卡列表，单次查询最多返回2000条数据
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListSubNetworkInterfaces
+        :type request: :class:`huaweicloudsdkvpc.v3.ListSubNetworkInterfacesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListSubNetworkInterfacesResponse`
+        """
+        http_info = self._list_sub_network_interfaces_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_sub_network_interfaces_invoker(self, request):
+        http_info = self._list_sub_network_interfaces_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_sub_network_interfaces_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListSubNetworkInterfacesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'virsubnet_id' in local_var_params:
+            query_params.append(('virsubnet_id', local_var_params['virsubnet_id']))
+            collection_formats['virsubnet_id'] = 'multi'
+        if 'private_ip_address' in local_var_params:
+            query_params.append(('private_ip_address', local_var_params['private_ip_address']))
+            collection_formats['private_ip_address'] = 'multi'
+        if 'mac_address' in local_var_params:
+            query_params.append(('mac_address', local_var_params['mac_address']))
+            collection_formats['mac_address'] = 'multi'
+        if 'vpc_id' in local_var_params:
+            query_params.append(('vpc_id', local_var_params['vpc_id']))
+            collection_formats['vpc_id'] = 'multi'
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'multi'
+        if 'parent_id' in local_var_params:
+            query_params.append(('parent_id', local_var_params['parent_id']))
+            collection_formats['parent_id'] = 'multi'
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_traffic_mirror_filter_rules(self, request):
+        r"""查询流量镜像筛选规则列表
+
+        查询流量镜像筛选规则列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListTrafficMirrorFilterRules
+        :type request: :class:`huaweicloudsdkvpc.v3.ListTrafficMirrorFilterRulesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListTrafficMirrorFilterRulesResponse`
+        """
+        http_info = self._list_traffic_mirror_filter_rules_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_traffic_mirror_filter_rules_invoker(self, request):
+        http_info = self._list_traffic_mirror_filter_rules_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_traffic_mirror_filter_rules_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filter-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListTrafficMirrorFilterRulesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+        if 'traffic_mirror_filter_id' in local_var_params:
+            query_params.append(('traffic_mirror_filter_id', local_var_params['traffic_mirror_filter_id']))
+        if 'direction' in local_var_params:
+            query_params.append(('direction', local_var_params['direction']))
+        if 'protocol' in local_var_params:
+            query_params.append(('protocol', local_var_params['protocol']))
+        if 'source_cidr_block' in local_var_params:
+            query_params.append(('source_cidr_block', local_var_params['source_cidr_block']))
+        if 'destination_cidr_block' in local_var_params:
+            query_params.append(('destination_cidr_block', local_var_params['destination_cidr_block']))
+        if 'source_port_range' in local_var_params:
+            query_params.append(('source_port_range', local_var_params['source_port_range']))
+        if 'destination_port_range' in local_var_params:
+            query_params.append(('destination_port_range', local_var_params['destination_port_range']))
+        if 'action' in local_var_params:
+            query_params.append(('action', local_var_params['action']))
+        if 'priority' in local_var_params:
+            query_params.append(('priority', local_var_params['priority']))
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_traffic_mirror_filters(self, request):
+        r"""查询流量镜像筛选条件列表
+
+        查询流量镜像筛选条件列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListTrafficMirrorFilters
+        :type request: :class:`huaweicloudsdkvpc.v3.ListTrafficMirrorFiltersRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListTrafficMirrorFiltersResponse`
+        """
+        http_info = self._list_traffic_mirror_filters_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_traffic_mirror_filters_invoker(self, request):
+        http_info = self._list_traffic_mirror_filters_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_traffic_mirror_filters_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filters",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListTrafficMirrorFiltersResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+        if 'created_at' in local_var_params:
+            query_params.append(('created_at', local_var_params['created_at']))
+        if 'updated_at' in local_var_params:
+            query_params.append(('updated_at', local_var_params['updated_at']))
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_traffic_mirror_sessions(self, request):
+        r"""查询流量镜像会话列表
+
+        查询流量镜像会话列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListTrafficMirrorSessions
+        :type request: :class:`huaweicloudsdkvpc.v3.ListTrafficMirrorSessionsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListTrafficMirrorSessionsResponse`
+        """
+        http_info = self._list_traffic_mirror_sessions_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_traffic_mirror_sessions_invoker(self, request):
+        http_info = self._list_traffic_mirror_sessions_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_traffic_mirror_sessions_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListTrafficMirrorSessionsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+        if 'traffic_mirror_filter_id' in local_var_params:
+            query_params.append(('traffic_mirror_filter_id', local_var_params['traffic_mirror_filter_id']))
+        if 'traffic_mirror_target_id' in local_var_params:
+            query_params.append(('traffic_mirror_target_id', local_var_params['traffic_mirror_target_id']))
+        if 'traffic_mirror_target_type' in local_var_params:
+            query_params.append(('traffic_mirror_target_type', local_var_params['traffic_mirror_target_type']))
+        if 'virtual_network_id' in local_var_params:
+            query_params.append(('virtual_network_id', local_var_params['virtual_network_id']))
+        if 'packet_length' in local_var_params:
+            query_params.append(('packet_length', local_var_params['packet_length']))
+        if 'priority' in local_var_params:
+            query_params.append(('priority', local_var_params['priority']))
+        if 'enabled' in local_var_params:
+            query_params.append(('enabled', local_var_params['enabled']))
+        if 'type' in local_var_params:
+            query_params.append(('type', local_var_params['type']))
+        if 'created_at' in local_var_params:
+            query_params.append(('created_at', local_var_params['created_at']))
+        if 'updated_at' in local_var_params:
+            query_params.append(('updated_at', local_var_params['updated_at']))
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_virsubnet_cidr_reservations(self, request):
+        r"""查询子网预留网段列表
+
+        当您的子网预留网段创建成功后，您可以通过调用该接口查询所有子网预留网段信息，包括子网预留网段名称、IP网段等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListVirsubnetCidrReservations
+        :type request: :class:`huaweicloudsdkvpc.v3.ListVirsubnetCidrReservationsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListVirsubnetCidrReservationsResponse`
+        """
+        http_info = self._list_virsubnet_cidr_reservations_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_virsubnet_cidr_reservations_invoker(self, request):
+        http_info = self._list_virsubnet_cidr_reservations_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_virsubnet_cidr_reservations_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/virsubnet-cidr-reservations",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListVirsubnetCidrReservationsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'virsubnet_id' in local_var_params:
+            query_params.append(('virsubnet_id', local_var_params['virsubnet_id']))
+            collection_formats['virsubnet_id'] = 'csv'
+        if 'cidr' in local_var_params:
+            query_params.append(('cidr', local_var_params['cidr']))
+            collection_formats['cidr'] = 'csv'
+        if 'ip_version' in local_var_params:
+            query_params.append(('ip_version', local_var_params['ip_version']))
+            collection_formats['ip_version'] = 'csv'
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'multi'
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'multi'
+        if 'enterprise_project_id' in local_var_params:
+            query_params.append(('enterprise_project_id', local_var_params['enterprise_project_id']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_virsubnets(self, request):
+        r"""查询虚拟子网列表
+
+        当您的子网创建成功后，您可以通过调用该接口查询所有子网信息，包括子网的名称、ID等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListVirsubnets
+        :type request: :class:`huaweicloudsdkvpc.v3.ListVirsubnetsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListVirsubnetsResponse`
+        """
+        http_info = self._list_virsubnets_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_virsubnets_invoker(self, request):
+        http_info = self._list_virsubnets_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_virsubnets_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/virsubnets",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListVirsubnetsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'multi'
+        if 'vpc_id' in local_var_params:
+            query_params.append(('vpc_id', local_var_params['vpc_id']))
+            collection_formats['vpc_id'] = 'csv'
+        if 'status' in local_var_params:
+            query_params.append(('status', local_var_params['status']))
+        if 'scope' in local_var_params:
+            query_params.append(('scope', local_var_params['scope']))
+            collection_formats['scope'] = 'csv'
+        if 'zone_id' in local_var_params:
+            query_params.append(('zone_id', local_var_params['zone_id']))
+            collection_formats['zone_id'] = 'csv'
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'csv'
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def migrate_sub_network_interface(self, request):
+        r"""迁移辅助弹性网卡
+
+        批量迁移辅助弹性网卡
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for MigrateSubNetworkInterface
+        :type request: :class:`huaweicloudsdkvpc.v3.MigrateSubNetworkInterfaceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.MigrateSubNetworkInterfaceResponse`
+        """
+        http_info = self._migrate_sub_network_interface_http_info(request)
+        return self._call_api(**http_info)
+
+    def migrate_sub_network_interface_invoker(self, request):
+        http_info = self._migrate_sub_network_interface_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _migrate_sub_network_interface_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces/migrate",
+            "request_type": request.__class__.__name__,
+            "response_type": "MigrateSubNetworkInterfaceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def remove_security_groups(self, request):
+        r"""端口移除安全组
+
+        端口移除安全组
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for RemoveSecurityGroups
+        :type request: :class:`huaweicloudsdkvpc.v3.RemoveSecurityGroupsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.RemoveSecurityGroupsResponse`
+        """
+        http_info = self._remove_security_groups_http_info(request)
+        return self._call_api(**http_info)
+
+    def remove_security_groups_invoker(self, request):
+        http_info = self._remove_security_groups_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _remove_security_groups_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/remove-security-groups",
+            "request_type": request.__class__.__name__,
+            "response_type": "RemoveSecurityGroupsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def remove_sources_from_traffic_mirror_session(self, request):
+        r"""流量镜像会话移除镜像源
+
+        流量镜像会话移除镜像源
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for RemoveSourcesFromTrafficMirrorSession
+        :type request: :class:`huaweicloudsdkvpc.v3.RemoveSourcesFromTrafficMirrorSessionRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.RemoveSourcesFromTrafficMirrorSessionResponse`
+        """
+        http_info = self._remove_sources_from_traffic_mirror_session_http_info(request)
+        return self._call_api(**http_info)
+
+    def remove_sources_from_traffic_mirror_session_invoker(self, request):
+        http_info = self._remove_sources_from_traffic_mirror_session_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _remove_sources_from_traffic_mirror_session_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions/{traffic_mirror_session_id}/remove-sources",
+            "request_type": request.__class__.__name__,
+            "response_type": "RemoveSourcesFromTrafficMirrorSessionResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_session_id' in local_var_params:
+            path_params['traffic_mirror_session_id'] = local_var_params['traffic_mirror_session_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_port(self, request):
+        r"""查询端口详情
+
+        当您的端口创建成功后，您可以通过调用该接口查询单个端口的详细信息，包括端口ID、IP地址、所属云服务实例等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowPort
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowPortRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowPortResponse`
+        """
+        http_info = self._show_port_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_port_invoker(self, request):
+        http_info = self._show_port_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_port_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/ports/{port_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowPortResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_port_tags(self, request):
+        r"""查询端口资源标签
+
+        查询指定端口的标签信息。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowPortTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowPortTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowPortTagsResponse`
+        """
+        http_info = self._show_port_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_port_tags_invoker(self, request):
+        http_info = self._show_port_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_port_tags_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/ports/{port_id}/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowPortTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'port_id' in local_var_params:
+            path_params['port_id'] = local_var_params['port_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_quota(self, request):
+        r"""查询配额
+
+        您可以通过此接口查询VPC服务相关资源的配额，包括安全组配额、安全组规则配额等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowQuota
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowQuotaRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowQuotaResponse`
+        """
+        http_info = self._show_quota_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_quota_invoker(self, request):
+        http_info = self._show_quota_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_quota_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/quotas",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowQuotaResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_security_group(self, request):
+        r"""查询安全组
+
+        查询单个安全组详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowSecurityGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowSecurityGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowSecurityGroupResponse`
+        """
+        http_info = self._show_security_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_security_group_invoker(self, request):
+        http_info = self._show_security_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_security_group_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/security-groups/{security_group_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowSecurityGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'security_group_id' in local_var_params:
+            path_params['security_group_id'] = local_var_params['security_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_security_group_rule(self, request):
+        r"""查询安全组规则
+
+        查询单个安全组规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowSecurityGroupRule
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowSecurityGroupRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowSecurityGroupRuleResponse`
+        """
+        http_info = self._show_security_group_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_security_group_rule_invoker(self, request):
+        http_info = self._show_security_group_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_security_group_rule_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/security-group-rules/{security_group_rule_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowSecurityGroupRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'security_group_rule_id' in local_var_params:
+            path_params['security_group_rule_id'] = local_var_params['security_group_rule_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_sub_network_interface(self, request):
+        r"""查询租户下辅助弹性网卡
+
+        查询辅助弹性网卡详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowSubNetworkInterface
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowSubNetworkInterfaceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowSubNetworkInterfaceResponse`
+        """
+        http_info = self._show_sub_network_interface_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_sub_network_interface_invoker(self, request):
+        http_info = self._show_sub_network_interface_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_sub_network_interface_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces/{sub_network_interface_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowSubNetworkInterfaceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'sub_network_interface_id' in local_var_params:
+            path_params['sub_network_interface_id'] = local_var_params['sub_network_interface_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_sub_network_interfaces_quantity(self, request):
+        r"""查询租户下辅助弹性网卡数目
+
+        查询辅助弹性网卡数目
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowSubNetworkInterfacesQuantity
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowSubNetworkInterfacesQuantityRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowSubNetworkInterfacesQuantityResponse`
+        """
+        http_info = self._show_sub_network_interfaces_quantity_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_sub_network_interfaces_quantity_invoker(self, request):
+        http_info = self._show_sub_network_interfaces_quantity_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_sub_network_interfaces_quantity_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces/count",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowSubNetworkInterfacesQuantityResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_traffic_mirror_filter(self, request):
+        r"""查询流量镜像筛选条件详情
+
+        查询流量镜像筛选条件详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowTrafficMirrorFilter
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowTrafficMirrorFilterRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowTrafficMirrorFilterResponse`
+        """
+        http_info = self._show_traffic_mirror_filter_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_traffic_mirror_filter_invoker(self, request):
+        http_info = self._show_traffic_mirror_filter_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_traffic_mirror_filter_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filters/{traffic_mirror_filter_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowTrafficMirrorFilterResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_filter_id' in local_var_params:
+            path_params['traffic_mirror_filter_id'] = local_var_params['traffic_mirror_filter_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_traffic_mirror_filter_rule(self, request):
+        r"""查询流量镜像筛选规则详情
+
+        查询流量镜像筛选规则详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowTrafficMirrorFilterRule
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowTrafficMirrorFilterRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowTrafficMirrorFilterRuleResponse`
+        """
+        http_info = self._show_traffic_mirror_filter_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_traffic_mirror_filter_rule_invoker(self, request):
+        http_info = self._show_traffic_mirror_filter_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_traffic_mirror_filter_rule_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filter-rules/{traffic_mirror_filter_rule_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowTrafficMirrorFilterRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_filter_rule_id' in local_var_params:
+            path_params['traffic_mirror_filter_rule_id'] = local_var_params['traffic_mirror_filter_rule_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_traffic_mirror_session(self, request):
+        r"""查询流量镜像会话详情
+
+        查询流量镜像会话详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowTrafficMirrorSession
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowTrafficMirrorSessionRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowTrafficMirrorSessionResponse`
+        """
+        http_info = self._show_traffic_mirror_session_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_traffic_mirror_session_invoker(self, request):
+        http_info = self._show_traffic_mirror_session_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_traffic_mirror_session_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions/{traffic_mirror_session_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowTrafficMirrorSessionResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_session_id' in local_var_params:
+            path_params['traffic_mirror_session_id'] = local_var_params['traffic_mirror_session_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_virsubnet(self, request):
+        r"""查询虚拟子网详情
+
+        当您的子网创建成功后，您可以通过调用该接口查询单个子网的详细信息，包括子网的名称、ID、状态等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowVirsubnet
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowVirsubnetRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowVirsubnetResponse`
+        """
+        http_info = self._show_virsubnet_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_virsubnet_invoker(self, request):
+        http_info = self._show_virsubnet_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_virsubnet_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/virsubnets/{virsubnet_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowVirsubnetResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'virsubnet_id' in local_var_params:
+            path_params['virsubnet_id'] = local_var_params['virsubnet_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_virsubnet_cidr_reservation(self, request):
+        r"""查询子网预留网段
+
+        当您的子网预留网段创建成功后，您可以通过调用该接口查询单个子网预留网段的详细信息，包括子网预留网段的名称、IP网段等。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowVirsubnetCidrReservation
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowVirsubnetCidrReservationRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowVirsubnetCidrReservationResponse`
+        """
+        http_info = self._show_virsubnet_cidr_reservation_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_virsubnet_cidr_reservation_invoker(self, request):
+        http_info = self._show_virsubnet_cidr_reservation_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_virsubnet_cidr_reservation_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/virsubnet-cidr-reservations/{virsubnet_cidr_reservation_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowVirsubnetCidrReservationResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'virsubnet_cidr_reservation_id' in local_var_params:
+            path_params['virsubnet_cidr_reservation_id'] = local_var_params['virsubnet_cidr_reservation_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_security_group(self, request):
+        r"""更新安全组
+
+        更新安全组
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateSecurityGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateSecurityGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateSecurityGroupResponse`
+        """
+        http_info = self._update_security_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_security_group_invoker(self, request):
+        http_info = self._update_security_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_security_group_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/security-groups/{security_group_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateSecurityGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'security_group_id' in local_var_params:
+            path_params['security_group_id'] = local_var_params['security_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_sub_network_interface(self, request):
+        r"""更新辅助弹性网卡
+
+        更新辅助弹性网卡
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateSubNetworkInterface
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateSubNetworkInterfaceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateSubNetworkInterfaceResponse`
+        """
+        http_info = self._update_sub_network_interface_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_sub_network_interface_invoker(self, request):
+        http_info = self._update_sub_network_interface_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_sub_network_interface_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/sub-network-interfaces/{sub_network_interface_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateSubNetworkInterfaceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'sub_network_interface_id' in local_var_params:
+            path_params['sub_network_interface_id'] = local_var_params['sub_network_interface_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_traffic_mirror_filter(self, request):
+        r"""更新流量镜像筛选条件
+
+        更新流量镜像筛选条件
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateTrafficMirrorFilter
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateTrafficMirrorFilterRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateTrafficMirrorFilterResponse`
+        """
+        http_info = self._update_traffic_mirror_filter_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_traffic_mirror_filter_invoker(self, request):
+        http_info = self._update_traffic_mirror_filter_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_traffic_mirror_filter_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filters/{traffic_mirror_filter_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateTrafficMirrorFilterResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_filter_id' in local_var_params:
+            path_params['traffic_mirror_filter_id'] = local_var_params['traffic_mirror_filter_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_traffic_mirror_filter_rule(self, request):
+        r"""更新流量镜像筛选规则
+
+        更新流量镜像筛选规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateTrafficMirrorFilterRule
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateTrafficMirrorFilterRuleRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateTrafficMirrorFilterRuleResponse`
+        """
+        http_info = self._update_traffic_mirror_filter_rule_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_traffic_mirror_filter_rule_invoker(self, request):
+        http_info = self._update_traffic_mirror_filter_rule_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_traffic_mirror_filter_rule_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-filter-rules/{traffic_mirror_filter_rule_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateTrafficMirrorFilterRuleResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_filter_rule_id' in local_var_params:
+            path_params['traffic_mirror_filter_rule_id'] = local_var_params['traffic_mirror_filter_rule_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_traffic_mirror_session(self, request):
+        r"""更新流量镜像会话
+
+        更新流量镜像会话
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateTrafficMirrorSession
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateTrafficMirrorSessionRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateTrafficMirrorSessionResponse`
+        """
+        http_info = self._update_traffic_mirror_session_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_traffic_mirror_session_invoker(self, request):
+        http_info = self._update_traffic_mirror_session_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_traffic_mirror_session_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/traffic-mirror-sessions/{traffic_mirror_session_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateTrafficMirrorSessionResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'traffic_mirror_session_id' in local_var_params:
+            path_params['traffic_mirror_session_id'] = local_var_params['traffic_mirror_session_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_virsubnet_cidr_reservation(self, request):
+        r"""更新子网预留网段
+
+        当您的子网预留网段创建成功后，您可以通过调用该接口更新子网预留网段的基本信息，包括子网预留网段的名称、描述信息。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateVirsubnetCidrReservation
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateVirsubnetCidrReservationRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateVirsubnetCidrReservationResponse`
+        """
+        http_info = self._update_virsubnet_cidr_reservation_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_virsubnet_cidr_reservation_invoker(self, request):
+        http_info = self._update_virsubnet_cidr_reservation_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_virsubnet_cidr_reservation_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/virsubnet-cidr-reservations/{virsubnet_cidr_reservation_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateVirsubnetCidrReservationResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'virsubnet_cidr_reservation_id' in local_var_params:
+            path_params['virsubnet_cidr_reservation_id'] = local_var_params['virsubnet_cidr_reservation_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def add_firewall_rules(self, request):
+        r"""网络ACL插入规则
+
+        网络ACL插入规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for AddFirewallRules
+        :type request: :class:`huaweicloudsdkvpc.v3.AddFirewallRulesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.AddFirewallRulesResponse`
+        """
+        http_info = self._add_firewall_rules_http_info(request)
+        return self._call_api(**http_info)
+
+    def add_firewall_rules_invoker(self, request):
+        http_info = self._add_firewall_rules_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _add_firewall_rules_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}/insert-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "AddFirewallRulesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def associate_subnet_firewall(self, request):
+        r"""网络ACL绑定子网
+
+        网络ACL绑定子网
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for AssociateSubnetFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.AssociateSubnetFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.AssociateSubnetFirewallResponse`
+        """
+        http_info = self._associate_subnet_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def associate_subnet_firewall_invoker(self, request):
+        http_info = self._associate_subnet_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _associate_subnet_firewall_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}/associate-subnets",
+            "request_type": request.__class__.__name__,
+            "response_type": "AssociateSubnetFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_create_firewall_tags(self, request):
+        r"""批量添加ACL资源标签
+
+        为指定的网络ACL资源实例批量添加标签。
+        此接口为幂等接口：创建时如果请求体中存在重复key则报错。创建时，不允许设置重复key数据，如果数据库已存在该key，就覆盖value的值。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchCreateFirewallTags
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchCreateFirewallTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchCreateFirewallTagsResponse`
+        """
+        http_info = self._batch_create_firewall_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_create_firewall_tags_invoker(self, request):
+        http_info = self._batch_create_firewall_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_create_firewall_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/firewalls/{firewall_id}/tags/create",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchCreateFirewallTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_delete_firewall_tags(self, request):
+        r"""批量删除ACL资源标签
+
+        为指定的网络ACL资源实例批量删除标签。
+        此接口为幂等接口：删除时，如果删除的标签不存在，默认处理成功；删除时不对标签字符集范围做校验。删除时tags结构体不能缺失，key不能为空，或者空字符串。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchDeleteFirewallTags
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchDeleteFirewallTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchDeleteFirewallTagsResponse`
+        """
+        http_info = self._batch_delete_firewall_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_delete_firewall_tags_invoker(self, request):
+        http_info = self._batch_delete_firewall_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_delete_firewall_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/firewalls/{firewall_id}/tags/delete",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchDeleteFirewallTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def count_firewalls_by_tags(self, request):
+        r"""查询ACL资源实例数量
+
+        使用标签过滤查询ACL实例数量。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CountFirewallsByTags
+        :type request: :class:`huaweicloudsdkvpc.v3.CountFirewallsByTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CountFirewallsByTagsResponse`
+        """
+        http_info = self._count_firewalls_by_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def count_firewalls_by_tags_invoker(self, request):
+        http_info = self._count_firewalls_by_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _count_firewalls_by_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/firewalls/resource-instances/count",
+            "request_type": request.__class__.__name__,
+            "response_type": "CountFirewallsByTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_firewall(self, request):
+        r"""创建网络ACL
+
+        创建网络ACL
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateFirewallResponse`
+        """
+        http_info = self._create_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_firewall_invoker(self, request):
+        http_info = self._create_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_firewall_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/firewalls",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_firewall_tag(self, request):
+        r"""添加ACL资源标签
+
+        给指定IP地址组资源实例增加标签信息
+        此接口为幂等接口：创建时，如果创建的标签已经存在（key相同），则覆盖。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateFirewallTag
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateFirewallTagRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateFirewallTagResponse`
+        """
+        http_info = self._create_firewall_tag_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_firewall_tag_invoker(self, request):
+        http_info = self._create_firewall_tag_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_firewall_tag_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/firewalls/{firewall_id}/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateFirewallTagResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_firewall(self, request):
+        r"""删除网络ACL
+
+        删除网络ACL
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteFirewallResponse`
+        """
+        http_info = self._delete_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_firewall_invoker(self, request):
+        http_info = self._delete_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_firewall_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_firewall_tag(self, request):
+        r"""删除ACL资源标签
+
+        删除指定IP地址组资源实例的标签信息
+        该接口为幂等接口：删除的key不存在报404，key不能为空或者空字符串
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteFirewallTag
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteFirewallTagRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteFirewallTagResponse`
+        """
+        http_info = self._delete_firewall_tag_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_firewall_tag_invoker(self, request):
+        http_info = self._delete_firewall_tag_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_firewall_tag_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/firewalls/{firewall_id}/tags/{tag_key}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteFirewallTagResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+        if 'tag_key' in local_var_params:
+            path_params['tag_key'] = local_var_params['tag_key']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def disassociate_subnet_firewall(self, request):
+        r"""网络ACL解绑子网
+
+        网络ACL解绑子网
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DisassociateSubnetFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.DisassociateSubnetFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DisassociateSubnetFirewallResponse`
+        """
+        http_info = self._disassociate_subnet_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def disassociate_subnet_firewall_invoker(self, request):
+        http_info = self._disassociate_subnet_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _disassociate_subnet_firewall_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}/disassociate-subnets",
+            "request_type": request.__class__.__name__,
+            "response_type": "DisassociateSubnetFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_firewall(self, request):
+        r"""查询网络ACL列表
+
+        查询网络ACL列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.ListFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListFirewallResponse`
+        """
+        http_info = self._list_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_firewall_invoker(self, request):
+        http_info = self._list_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_firewall_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/firewalls",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'multi'
+        if 'status' in local_var_params:
+            query_params.append(('status', local_var_params['status']))
+        if 'admin_state_up' in local_var_params:
+            query_params.append(('admin_state_up', local_var_params['admin_state_up']))
+        if 'enterprise_project_id' in local_var_params:
+            query_params.append(('enterprise_project_id', local_var_params['enterprise_project_id']))
+            collection_formats['enterprise_project_id'] = 'multi'
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_firewall_tags(self, request):
+        r"""查询ACL项目标签
+
+        查询租户在指定Project中实例类型的所有资源标签集合
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListFirewallTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListFirewallTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListFirewallTagsResponse`
+        """
+        http_info = self._list_firewall_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_firewall_tags_invoker(self, request):
+        http_info = self._list_firewall_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_firewall_tags_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/firewalls/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListFirewallTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'offset' in local_var_params:
+            query_params.append(('offset', local_var_params['offset']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_firewalls_by_tags(self, request):
+        r"""查询ACL资源实例列表
+
+        使用标签过滤查询ACL实例。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListFirewallsByTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListFirewallsByTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListFirewallsByTagsResponse`
+        """
+        http_info = self._list_firewalls_by_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_firewalls_by_tags_invoker(self, request):
+        http_info = self._list_firewalls_by_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_firewalls_by_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/firewalls/resource-instances/filter",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListFirewallsByTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'offset' in local_var_params:
+            query_params.append(('offset', local_var_params['offset']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def remove_firewall_rules(self, request):
+        r"""网络ACL移除规则
+
+        网络ACL移除规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for RemoveFirewallRules
+        :type request: :class:`huaweicloudsdkvpc.v3.RemoveFirewallRulesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.RemoveFirewallRulesResponse`
+        """
+        http_info = self._remove_firewall_rules_http_info(request)
+        return self._call_api(**http_info)
+
+    def remove_firewall_rules_invoker(self, request):
+        http_info = self._remove_firewall_rules_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _remove_firewall_rules_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}/remove-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "RemoveFirewallRulesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_firewall(self, request):
+        r"""查询网络ACL详情
+
+        查询网络ACL详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowFirewallResponse`
+        """
+        http_info = self._show_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_firewall_invoker(self, request):
+        http_info = self._show_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_firewall_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_firewall_tags(self, request):
+        r"""查询ACL资源标签
+
+        查询指定ACL实例的标签信息
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowFirewallTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowFirewallTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowFirewallTagsResponse`
+        """
+        http_info = self._show_firewall_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_firewall_tags_invoker(self, request):
+        http_info = self._show_firewall_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_firewall_tags_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/firewalls/{firewall_id}/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowFirewallTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_firewall(self, request):
+        r"""更新网络ACL
+
+        更新网络ACL
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateFirewall
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateFirewallRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateFirewallResponse`
+        """
+        http_info = self._update_firewall_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_firewall_invoker(self, request):
+        http_info = self._update_firewall_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_firewall_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateFirewallResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_firewall_rules(self, request):
+        r"""网络ACL更新规则
+
+        网络ACL更新规则
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateFirewallRules
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateFirewallRulesRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateFirewallRulesResponse`
+        """
+        http_info = self._update_firewall_rules_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_firewall_rules_invoker(self, request):
+        http_info = self._update_firewall_rules_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_firewall_rules_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/firewalls/{firewall_id}/update-rules",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateFirewallRulesResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'firewall_id' in local_var_params:
+            path_params['firewall_id'] = local_var_params['firewall_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def add_clouddcn_subnets_tags(self, request):
+        r"""添加Clouddcn子网标签
+
+        添加Clouddcn子网的标签
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for AddClouddcnSubnetsTags
+        :type request: :class:`huaweicloudsdkvpc.v3.AddClouddcnSubnetsTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.AddClouddcnSubnetsTagsResponse`
+        """
+        http_info = self._add_clouddcn_subnets_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def add_clouddcn_subnets_tags_invoker(self, request):
+        http_info = self._add_clouddcn_subnets_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _add_clouddcn_subnets_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/{resource_id}/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "AddClouddcnSubnetsTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'resource_id' in local_var_params:
+            path_params['resource_id'] = local_var_params['resource_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_create_clouddcn_subnets_tags(self, request):
+        r"""批量添加Clouddcn子网标签
+
+        批量添加Clouddcn子网的标签
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchCreateClouddcnSubnetsTags
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchCreateClouddcnSubnetsTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchCreateClouddcnSubnetsTagsResponse`
+        """
+        http_info = self._batch_create_clouddcn_subnets_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_create_clouddcn_subnets_tags_invoker(self, request):
+        http_info = self._batch_create_clouddcn_subnets_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_create_clouddcn_subnets_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/{resource_id}/tags/create",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchCreateClouddcnSubnetsTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'resource_id' in local_var_params:
+            path_params['resource_id'] = local_var_params['resource_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def batch_delete_clouddcn_subnets_tags(self, request):
+        r"""批量删除Clouddcn子网标签
+
+        批量删除Clouddcn子网的标签
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for BatchDeleteClouddcnSubnetsTags
+        :type request: :class:`huaweicloudsdkvpc.v3.BatchDeleteClouddcnSubnetsTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.BatchDeleteClouddcnSubnetsTagsResponse`
+        """
+        http_info = self._batch_delete_clouddcn_subnets_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def batch_delete_clouddcn_subnets_tags_invoker(self, request):
+        http_info = self._batch_delete_clouddcn_subnets_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _batch_delete_clouddcn_subnets_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/{resource_id}/tags/delete",
+            "request_type": request.__class__.__name__,
+            "response_type": "BatchDeleteClouddcnSubnetsTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'resource_id' in local_var_params:
+            path_params['resource_id'] = local_var_params['resource_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_clouddcn_subnet(self, request):
+        r"""创建clouddcn子网
+
+        创建clouddcn子网。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateClouddcnSubnet
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateClouddcnSubnetRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateClouddcnSubnetResponse`
+        """
+        http_info = self._create_clouddcn_subnet_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_clouddcn_subnet_invoker(self, request):
+        http_info = self._create_clouddcn_subnet_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_clouddcn_subnet_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/clouddcn-subnets",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateClouddcnSubnetResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_clouddcn_subnet(self, request):
+        r"""删除clouddcn子网
+
+        删除clouddcn子网
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteClouddcnSubnet
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteClouddcnSubnetRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteClouddcnSubnetResponse`
+        """
+        http_info = self._delete_clouddcn_subnet_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_clouddcn_subnet_invoker(self, request):
+        http_info = self._delete_clouddcn_subnet_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_clouddcn_subnet_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/clouddcn-subnets/{clouddcn_subnet_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteClouddcnSubnetResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'clouddcn_subnet_id' in local_var_params:
+            path_params['clouddcn_subnet_id'] = local_var_params['clouddcn_subnet_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_clouddcn_subnets_tag(self, request):
+        r"""删除Clouddcn子网标签
+
+        删除Clouddcn子网的标签
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteClouddcnSubnetsTag
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteClouddcnSubnetsTagRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteClouddcnSubnetsTagResponse`
+        """
+        http_info = self._delete_clouddcn_subnets_tag_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_clouddcn_subnets_tag_invoker(self, request):
+        http_info = self._delete_clouddcn_subnets_tag_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_clouddcn_subnets_tag_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/{resource_id}/tags/{tag_key}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteClouddcnSubnetsTagResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'resource_id' in local_var_params:
+            path_params['resource_id'] = local_var_params['resource_id']
+        if 'tag_key' in local_var_params:
+            path_params['tag_key'] = local_var_params['tag_key']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_clouddcn_subnets(self, request):
+        r"""查询clouddcn子网列表
+
+        查询clouddcn子网列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListClouddcnSubnets
+        :type request: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsResponse`
+        """
+        http_info = self._list_clouddcn_subnets_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_clouddcn_subnets_invoker(self, request):
+        http_info = self._list_clouddcn_subnets_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_clouddcn_subnets_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/clouddcn-subnets",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListClouddcnSubnetsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'vpc_id' in local_var_params:
+            query_params.append(('vpc_id', local_var_params['vpc_id']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_clouddcn_subnets_count_filter_tags(self, request):
+        r"""查询资源实例列表数目
+
+        查询资源实例列表数目
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListClouddcnSubnetsCountFilterTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsCountFilterTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsCountFilterTagsResponse`
+        """
+        http_info = self._list_clouddcn_subnets_count_filter_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_clouddcn_subnets_count_filter_tags_invoker(self, request):
+        http_info = self._list_clouddcn_subnets_count_filter_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_clouddcn_subnets_count_filter_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/resource-instances/count",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListClouddcnSubnetsCountFilterTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_clouddcn_subnets_filter_tags(self, request):
+        r"""查询资源实例列表
+
+        查询资源实例列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListClouddcnSubnetsFilterTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsFilterTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsFilterTagsResponse`
+        """
+        http_info = self._list_clouddcn_subnets_filter_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_clouddcn_subnets_filter_tags_invoker(self, request):
+        http_info = self._list_clouddcn_subnets_filter_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_clouddcn_subnets_filter_tags_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/resource-instances/filter",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListClouddcnSubnetsFilterTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'offset' in local_var_params:
+            query_params.append(('offset', local_var_params['offset']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_clouddcn_subnets_tags(self, request):
+        r"""查询Clouddcn子网项目标签
+
+        查询Clouddcn子网的项目标签
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListClouddcnSubnetsTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListClouddcnSubnetsTagsResponse`
+        """
+        http_info = self._list_clouddcn_subnets_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_clouddcn_subnets_tags_invoker(self, request):
+        http_info = self._list_clouddcn_subnets_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_clouddcn_subnets_tags_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListClouddcnSubnetsTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_clouddcn_subnet(self, request):
+        r"""查询clouddcn子网
+
+        查询clouddcn子网详情。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowClouddcnSubnet
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowClouddcnSubnetRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowClouddcnSubnetResponse`
+        """
+        http_info = self._show_clouddcn_subnet_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_clouddcn_subnet_invoker(self, request):
+        http_info = self._show_clouddcn_subnet_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_clouddcn_subnet_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/clouddcn-subnets/{clouddcn_subnet_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowClouddcnSubnetResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'clouddcn_subnet_id' in local_var_params:
+            path_params['clouddcn_subnet_id'] = local_var_params['clouddcn_subnet_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_clouddcn_subnets_tags(self, request):
+        r"""查询Clouddcn子网标签
+
+        查询Clouddcn子网的标签
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowClouddcnSubnetsTags
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowClouddcnSubnetsTagsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowClouddcnSubnetsTagsResponse`
+        """
+        http_info = self._show_clouddcn_subnets_tags_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_clouddcn_subnets_tags_invoker(self, request):
+        http_info = self._show_clouddcn_subnets_tags_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_clouddcn_subnets_tags_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/clouddcn-subnets/{resource_id}/tags",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowClouddcnSubnetsTagsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'resource_id' in local_var_params:
+            path_params['resource_id'] = local_var_params['resource_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_clouddcn_subnet(self, request):
+        r"""更新clouddcn子网
+
+        更新clouddcn子网。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateClouddcnSubnet
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateClouddcnSubnetRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateClouddcnSubnetResponse`
+        """
+        http_info = self._update_clouddcn_subnet_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_clouddcn_subnet_invoker(self, request):
+        http_info = self._update_clouddcn_subnet_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_clouddcn_subnet_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/clouddcn-subnets/{clouddcn_subnet_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateClouddcnSubnetResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'clouddcn_subnet_id' in local_var_params:
+            path_params['clouddcn_subnet_id'] = local_var_params['clouddcn_subnet_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_address_group(self, request):
+        r"""创建地址组
+
+        创建地址组
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateAddressGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateAddressGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateAddressGroupResponse`
+        """
+        http_info = self._create_address_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_address_group_invoker(self, request):
+        http_info = self._create_address_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_address_group_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/address-groups",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateAddressGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_address_group(self, request):
+        r"""删除地址组
+
+        删除地址组，非强制删除，删除前请确保未被其他资源引用
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteAddressGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteAddressGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteAddressGroupResponse`
+        """
+        http_info = self._delete_address_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_address_group_invoker(self, request):
+        http_info = self._delete_address_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_address_group_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/address-groups/{address_group_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteAddressGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'address_group_id' in local_var_params:
+            path_params['address_group_id'] = local_var_params['address_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_ip_address_group_force(self, request):
+        r"""强制删除地址组
+
+        强制删除地址组，删除的地址组与安全组规则关联时，会删除地址组与关联的安全组规则。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteIpAddressGroupForce
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteIpAddressGroupForceRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteIpAddressGroupForceResponse`
+        """
+        http_info = self._delete_ip_address_group_force_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_ip_address_group_force_invoker(self, request):
+        http_info = self._delete_ip_address_group_force_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_ip_address_group_force_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/address-groups/{address_group_id}/force",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteIpAddressGroupForceResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'address_group_id' in local_var_params:
+            path_params['address_group_id'] = local_var_params['address_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_address_group(self, request):
+        r"""查询地址组列表
+
+        查询地址组列表，根据过滤条件进行过滤。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListAddressGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.ListAddressGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListAddressGroupResponse`
+        """
+        http_info = self._list_address_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_address_group_invoker(self, request):
+        http_info = self._list_address_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_address_group_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/address-groups",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListAddressGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'multi'
+        if 'ip_version' in local_var_params:
+            query_params.append(('ip_version', local_var_params['ip_version']))
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'multi'
+        if 'enterprise_project_id' in local_var_params:
+            query_params.append(('enterprise_project_id', local_var_params['enterprise_project_id']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_address_groups_dependency(self, request):
+        r"""查询IP地址组的关联资源
+
+        当您的IP地址组被网络ACL和安全组资源关联时，您可以通过调用该接口查询IP地址组关联的网络ACL或安全组的资源ID和名称。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListAddressGroupsDependency
+        :type request: :class:`huaweicloudsdkvpc.v3.ListAddressGroupsDependencyRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListAddressGroupsDependencyResponse`
+        """
+        http_info = self._list_address_groups_dependency_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_address_groups_dependency_invoker(self, request):
+        http_info = self._list_address_groups_dependency_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_address_groups_dependency_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/list-address-groups-dependency",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListAddressGroupsDependencyResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+        if 'enterprise_project_id' in local_var_params:
+            query_params.append(('enterprise_project_id', local_var_params['enterprise_project_id']))
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_address_group(self, request):
+        r"""查询地址组
+
+        查询地址组详情。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowAddressGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowAddressGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowAddressGroupResponse`
+        """
+        http_info = self._show_address_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_address_group_invoker(self, request):
+        http_info = self._show_address_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_address_group_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/address-groups/{address_group_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowAddressGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'address_group_id' in local_var_params:
+            path_params['address_group_id'] = local_var_params['address_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_address_group(self, request):
+        r"""更新地址组
+
+        更新地址组。
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateAddressGroup
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateAddressGroupRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateAddressGroupResponse`
+        """
+        http_info = self._update_address_group_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_address_group_invoker(self, request):
+        http_info = self._update_address_group_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_address_group_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/address-groups/{address_group_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateAddressGroupResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'address_group_id' in local_var_params:
+            path_params['address_group_id'] = local_var_params['address_group_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def add_vpc_extend_cidr(self, request):
+        r"""添加VPC扩展网段
+
+        添加VPC的扩展网段
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for AddVpcExtendCidr
+        :type request: :class:`huaweicloudsdkvpc.v3.AddVpcExtendCidrRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.AddVpcExtendCidrResponse`
+        """
+        http_info = self._add_vpc_extend_cidr_http_info(request)
+        return self._call_api(**http_info)
+
+    def add_vpc_extend_cidr_invoker(self, request):
+        http_info = self._add_vpc_extend_cidr_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _add_vpc_extend_cidr_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/vpcs/{vpc_id}/add-extend-cidr",
+            "request_type": request.__class__.__name__,
+            "response_type": "AddVpcExtendCidrResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'vpc_id' in local_var_params:
+            path_params['vpc_id'] = local_var_params['vpc_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def create_vpc(self, request):
+        r"""创建VPC
+
+        创建虚拟私有云
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for CreateVpc
+        :type request: :class:`huaweicloudsdkvpc.v3.CreateVpcRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.CreateVpcResponse`
+        """
+        http_info = self._create_vpc_http_info(request)
+        return self._call_api(**http_info)
+
+    def create_vpc_invoker(self, request):
+        http_info = self._create_vpc_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _create_vpc_http_info(cls, request):
+        http_info = {
+            "method": "POST",
+            "resource_path": "/v3/{project_id}/vpc/vpcs",
+            "request_type": request.__class__.__name__,
+            "response_type": "CreateVpcResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def delete_vpc(self, request):
+        r"""删除VPC
+
+        删除VPC
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for DeleteVpc
+        :type request: :class:`huaweicloudsdkvpc.v3.DeleteVpcRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.DeleteVpcResponse`
+        """
+        http_info = self._delete_vpc_http_info(request)
+        return self._call_api(**http_info)
+
+    def delete_vpc_invoker(self, request):
+        http_info = self._delete_vpc_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _delete_vpc_http_info(cls, request):
+        http_info = {
+            "method": "DELETE",
+            "resource_path": "/v3/{project_id}/vpc/vpcs/{vpc_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "DeleteVpcResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'vpc_id' in local_var_params:
+            path_params['vpc_id'] = local_var_params['vpc_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def list_vpcs(self, request):
+        r"""查询VPC列表
+
+        查询vpc列表
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ListVpcs
+        :type request: :class:`huaweicloudsdkvpc.v3.ListVpcsRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ListVpcsResponse`
+        """
+        http_info = self._list_vpcs_http_info(request)
+        return self._call_api(**http_info)
+
+    def list_vpcs_invoker(self, request):
+        http_info = self._list_vpcs_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _list_vpcs_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/vpcs",
+            "request_type": request.__class__.__name__,
+            "response_type": "ListVpcsResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'limit' in local_var_params:
+            query_params.append(('limit', local_var_params['limit']))
+        if 'marker' in local_var_params:
+            query_params.append(('marker', local_var_params['marker']))
+        if 'id' in local_var_params:
+            query_params.append(('id', local_var_params['id']))
+            collection_formats['id'] = 'multi'
+        if 'enterprise_project_id' in local_var_params:
+            query_params.append(('enterprise_project_id', local_var_params['enterprise_project_id']))
+        if 'name' in local_var_params:
+            query_params.append(('name', local_var_params['name']))
+            collection_formats['name'] = 'multi'
+        if 'description' in local_var_params:
+            query_params.append(('description', local_var_params['description']))
+            collection_formats['description'] = 'multi'
+        if 'cidr' in local_var_params:
+            query_params.append(('cidr', local_var_params['cidr']))
+            collection_formats['cidr'] = 'multi'
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def remove_vpc_extend_cidr(self, request):
+        r"""移除VPC扩展网段
+
+        移除VPC扩展网段
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for RemoveVpcExtendCidr
+        :type request: :class:`huaweicloudsdkvpc.v3.RemoveVpcExtendCidrRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.RemoveVpcExtendCidrResponse`
+        """
+        http_info = self._remove_vpc_extend_cidr_http_info(request)
+        return self._call_api(**http_info)
+
+    def remove_vpc_extend_cidr_invoker(self, request):
+        http_info = self._remove_vpc_extend_cidr_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _remove_vpc_extend_cidr_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/vpcs/{vpc_id}/remove-extend-cidr",
+            "request_type": request.__class__.__name__,
+            "response_type": "RemoveVpcExtendCidrResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'vpc_id' in local_var_params:
+            path_params['vpc_id'] = local_var_params['vpc_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def show_vpc(self, request):
+        r"""查询VPC详情
+
+        查询vpc详情
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for ShowVpc
+        :type request: :class:`huaweicloudsdkvpc.v3.ShowVpcRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.ShowVpcResponse`
+        """
+        http_info = self._show_vpc_http_info(request)
+        return self._call_api(**http_info)
+
+    def show_vpc_invoker(self, request):
+        http_info = self._show_vpc_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _show_vpc_http_info(cls, request):
+        http_info = {
+            "method": "GET",
+            "resource_path": "/v3/{project_id}/vpc/vpcs/{vpc_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "ShowVpcResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'vpc_id' in local_var_params:
+            path_params['vpc_id'] = local_var_params['vpc_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def update_vpc(self, request):
+        r"""更新VPC
+
+        更新vpc
+        
+        Please refer to HUAWEI cloud API Explorer for details.
+
+        :param request: Request instance for UpdateVpc
+        :type request: :class:`huaweicloudsdkvpc.v3.UpdateVpcRequest`
+        :rtype: :class:`huaweicloudsdkvpc.v3.UpdateVpcResponse`
+        """
+        http_info = self._update_vpc_http_info(request)
+        return self._call_api(**http_info)
+
+    def update_vpc_invoker(self, request):
+        http_info = self._update_vpc_http_info(request)
+        return SyncInvoker(self, http_info)
+
+    @classmethod
+    def _update_vpc_http_info(cls, request):
+        http_info = {
+            "method": "PUT",
+            "resource_path": "/v3/{project_id}/vpc/vpcs/{vpc_id}",
+            "request_type": request.__class__.__name__,
+            "response_type": "UpdateVpcResponse"
+            }
+
+        local_var_params = {attr: getattr(request, attr) for attr in request.attribute_map if hasattr(request, attr)}
+
+        cname = None
+
+        collection_formats = {}
+
+        path_params = {}
+        if 'vpc_id' in local_var_params:
+            path_params['vpc_id'] = local_var_params['vpc_id']
+
+        query_params = []
+
+        header_params = {}
+
+        form_params = {}
+
+        body = None
+        if 'body' in local_var_params:
+            body = local_var_params['body']
+        if isinstance(request, SdkStreamRequest):
+            body = request.get_file_stream()
+
+        response_headers = []
+
+        header_params['Content-Type'] = http_utils.select_header_content_type(
+            ['application/json'])
+
+        auth_settings = []
+
+        http_info["cname"] = cname
+        http_info["collection_formats"] = collection_formats
+        http_info["path_params"] = path_params
+        http_info["query_params"] = query_params
+        http_info["header_params"] = header_params
+        http_info["post_params"] = form_params
+        http_info["body"] = body
+        http_info["response_headers"] = response_headers
+
+        return http_info
+
+    def _call_api(self, **kwargs):
+        try:
+            return self.do_http_request(**kwargs)
+        except TypeError:
+            import inspect
+            params = inspect.signature(self.do_http_request).parameters
+            http_info = {param_name: kwargs.get(param_name) for param_name in params if param_name in kwargs}
+            return self.do_http_request(**http_info)
+
+    def call_api(self, resource_path, method, path_params=None, query_params=None, header_params=None, body=None,
+                 post_params=None, cname=None, response_type=None, response_headers=None, auth_settings=None,
+                 collection_formats=None, request_type=None):
+        """Makes the HTTP request and returns deserialized data.
+
+        :param resource_path: Path to method endpoint.
+        :param method: Method to call.
+        :param path_params: Path parameters in the url.
+        :param query_params: Query parameters in the url.
+        :param header_params: Header parameters to be placed in the request header.
+        :param body: Request body.
+        :param post_params: Request post form parameters,
+            for `application/x-www-form-urlencoded`, `multipart/form-data`.
+        :param cname: Used for obs endpoint.
+        :param auth_settings: Auth Settings names for the request.
+        :param response_type: Response data type.
+        :param response_headers: Header should be added to response data.
+        :param collection_formats: dict of collection formats for path, query,
+            header, and post parameters.
+        :param request_type: Request data type.
+        :return:
+            Return the response directly.
+        """
+        return self.do_http_request(
+            method=method,
+            resource_path=resource_path,
+            path_params=path_params,
+            query_params=query_params,
+            header_params=header_params,
+            body=body,
+            post_params=post_params,
+            cname=cname,
+            response_type=response_type,
+            response_headers=response_headers,
+            collection_formats=collection_formats,
+            request_type=request_type)

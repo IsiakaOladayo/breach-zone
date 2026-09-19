@@ -1,0 +1,76 @@
+from prowler.lib.check.models import Check, Check_Report_Azure
+from prowler.providers.azure.config import (
+    CONTRIBUTOR_ROLE_ID,
+    OWNER_ROLE_ID,
+    VIRTUAL_MACHINE_ADMINISTRATOR_LOGIN_ROLE_ID,
+    VIRTUAL_MACHINE_CONTRIBUTOR_ROLE_ID,
+    VIRTUAL_MACHINE_LOCAL_USER_LOGIN_ROLE_ID,
+    VIRTUAL_MACHINE_USER_LOGIN_ROLE_ID,
+    WINDOWS_ADMIN_CENTER_ADMINISTRATOR_LOGIN_ROLE_ID,
+)
+from prowler.providers.azure.services.entra.entra_client import entra_client
+from prowler.providers.azure.services.iam.iam_client import iam_client
+
+
+class entra_user_with_vm_access_has_mfa(Check):
+    def execute(self) -> Check_Report_Azure:
+        findings = []
+        already_reported = set()
+
+        for tenant_domain, users in entra_client.users.items():
+            if tenant_domain in entra_client.users_retrieval_errors:
+                report = Check_Report_Azure(metadata=self.metadata(), resource={})
+                report.subscription = f"Tenant: {tenant_domain}"
+                report.resource_name = tenant_domain
+                report.resource_id = entra_client.tenant_ids[0]
+                report.status = "MANUAL"
+                report.status_extended = (
+                    f"Cannot evaluate MFA for the tenant's users with VM access for tenant {tenant_domain}: "
+                    f"Microsoft Graph did not return the tenant's users "
+                    f"({entra_client.users_retrieval_errors[tenant_domain]}). "
+                    f"Retry the scan or review the tenant's users manually."
+                )
+                findings.append(report)
+                continue
+
+            for user in users.values():
+                for (
+                    subscription_id,
+                    role_assigns,
+                ) in iam_client.role_assignments.items():
+                    subscription_name = entra_client.subscriptions.get(
+                        subscription_id, subscription_id
+                    )
+                    if (user.id, subscription_id) in already_reported:
+                        continue
+
+                    for assignment in role_assigns.values():
+                        if (
+                            assignment.agent_type == "User"
+                            and assignment.role_id
+                            in [
+                                CONTRIBUTOR_ROLE_ID,
+                                OWNER_ROLE_ID,
+                                VIRTUAL_MACHINE_CONTRIBUTOR_ROLE_ID,
+                                VIRTUAL_MACHINE_ADMINISTRATOR_LOGIN_ROLE_ID,
+                                VIRTUAL_MACHINE_USER_LOGIN_ROLE_ID,
+                                VIRTUAL_MACHINE_LOCAL_USER_LOGIN_ROLE_ID,
+                                WINDOWS_ADMIN_CENTER_ADMINISTRATOR_LOGIN_ROLE_ID,
+                            ]
+                            and assignment.agent_id == user.id
+                        ):
+                            report = Check_Report_Azure(
+                                metadata=self.metadata(), resource=user
+                            )
+                            report.subscription = subscription_id
+                            report.status = "FAIL"
+                            report.status_extended = f"User {user.name} without MFA can access VMs in subscription {subscription_name} ({subscription_id})"
+                            if user.is_mfa_capable:
+                                report.status = "PASS"
+                                report.status_extended = f"User {user.name} can access VMs in subscription {subscription_name} ({subscription_id}) but it has MFA."
+
+                            findings.append(report)
+                            already_reported.add((user.id, subscription_id))
+                            break
+
+        return findings

@@ -1,0 +1,32 @@
+{
+  "aws:requesttag/${tagkey}": {
+    "key": "aws:RequestTag/${TagKey}",
+    "description": "Filters access by a tag key that is present in the request that the user makes to IoT Wireless",
+    "type": "String"
+  },
+  "aws:resourcetag/${tagkey}": {
+    "key": "aws:ResourceTag/${TagKey}",
+    "description": "Filters access by tag key component of a tag attached to an IoT Wireless resource",
+    "type": "String"
+  },
+  "aws:tagkeys": {
+    "key": "aws:TagKeys",
+    "description": "Filters access by the list of all the tag key names associated with the resource in the request",
+    "type": "ArrayOfString"
+  },
+  "iotwireless:destinationname": {
+    "key": "iotwireless:DestinationName",
+    "description": "Filters access by destination name associated with the IoT Wireless resource",
+    "type": "String"
+  },
+  "iotwireless:deviceprofileid": {
+    "key": "iotwireless:DeviceProfileId",
+    "description": "Filters access by device profile id associated with the IoT Wireless resource",
+    "type": "String"
+  },
+  "iotwireless:serviceprofileid": {
+    "key": "iotwireless:ServiceProfileId",
+    "description": "Filters access by service profile id associated with the IoT Wireless resource",
+    "type": "String"
+  }
+}

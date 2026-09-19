@@ -1,0 +1,195 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class VolumeMetadata:
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'system__cmkid': 'str',
+        'system__encrypted': 'str',
+        'hwpassthrough': 'str',
+        'order_id': 'str'
+    }
+
+    attribute_map = {
+        'system__cmkid': '__system__cmkid',
+        'system__encrypted': '__system__encrypted',
+        'hwpassthrough': 'hw:passthrough',
+        'order_id': 'orderID'
+    }
+
+    def __init__(self, system__cmkid=None, system__encrypted=None, hwpassthrough=None, order_id=None):
+        r"""VolumeMetadata
+
+        The model defined in huaweicloud sdk
+
+        :param system__cmkid: metadata中的加密cmkid字段，与__system__encrypted配合表示需要加密，cmkid长度固定为36个字节。 &gt; 说明： &gt;  &gt; 请求获取密钥ID的方法请参考：\&quot;[查询密钥列表](https://support.huaweicloud.com/api-dew/dew_02_0017.html)\&quot;。
+        :type system__cmkid: str
+        :param system__encrypted: metadata中的表示加密功能的字段，0代表不加密，1代表加密。 不指定该字段时，云硬盘的加密属性与数据源保持一致，如果不是从数据源创建的场景，则默认不加密。
+        :type system__encrypted: str
+        :param hwpassthrough: * true表示云硬盘的设备类型为SCSI类型，即允许ECS操作系统直接访问底层存储介质。支持SCSI锁命令。 * false表示云硬盘的设备类型为VBD (虚拟块存储设备 , Virtual Block Device)类型，即为默认类型，VBD只能支持简单的SCSI读写命令。 * 该字段不存在时，云硬盘默认为VBD类型。
+        :type hwpassthrough: str
+        :param order_id: metadata中的表示云硬盘计费类型的字段。 当该字段有值时，表示该云硬盘的计费类型为包周期计费，否则计费类型为按需计费。
+        :type order_id: str
+        """
+        
+        
+
+        self._system__cmkid = None
+        self._system__encrypted = None
+        self._hwpassthrough = None
+        self._order_id = None
+        self.discriminator = None
+
+        if system__cmkid is not None:
+            self.system__cmkid = system__cmkid
+        if system__encrypted is not None:
+            self.system__encrypted = system__encrypted
+        if hwpassthrough is not None:
+            self.hwpassthrough = hwpassthrough
+        if order_id is not None:
+            self.order_id = order_id
+
+    @property
+    def system__cmkid(self):
+        r"""Gets the system__cmkid of this VolumeMetadata.
+
+        metadata中的加密cmkid字段，与__system__encrypted配合表示需要加密，cmkid长度固定为36个字节。 > 说明： >  > 请求获取密钥ID的方法请参考：\"[查询密钥列表](https://support.huaweicloud.com/api-dew/dew_02_0017.html)\"。
+
+        :return: The system__cmkid of this VolumeMetadata.
+        :rtype: str
+        """
+        return self._system__cmkid
+
+    @system__cmkid.setter
+    def system__cmkid(self, system__cmkid):
+        r"""Sets the system__cmkid of this VolumeMetadata.
+
+        metadata中的加密cmkid字段，与__system__encrypted配合表示需要加密，cmkid长度固定为36个字节。 > 说明： >  > 请求获取密钥ID的方法请参考：\"[查询密钥列表](https://support.huaweicloud.com/api-dew/dew_02_0017.html)\"。
+
+        :param system__cmkid: The system__cmkid of this VolumeMetadata.
+        :type system__cmkid: str
+        """
+        self._system__cmkid = system__cmkid
+
+    @property
+    def system__encrypted(self):
+        r"""Gets the system__encrypted of this VolumeMetadata.
+
+        metadata中的表示加密功能的字段，0代表不加密，1代表加密。 不指定该字段时，云硬盘的加密属性与数据源保持一致，如果不是从数据源创建的场景，则默认不加密。
+
+        :return: The system__encrypted of this VolumeMetadata.
+        :rtype: str
+        """
+        return self._system__encrypted
+
+    @system__encrypted.setter
+    def system__encrypted(self, system__encrypted):
+        r"""Sets the system__encrypted of this VolumeMetadata.
+
+        metadata中的表示加密功能的字段，0代表不加密，1代表加密。 不指定该字段时，云硬盘的加密属性与数据源保持一致，如果不是从数据源创建的场景，则默认不加密。
+
+        :param system__encrypted: The system__encrypted of this VolumeMetadata.
+        :type system__encrypted: str
+        """
+        self._system__encrypted = system__encrypted
+
+    @property
+    def hwpassthrough(self):
+        r"""Gets the hwpassthrough of this VolumeMetadata.
+
+        * true表示云硬盘的设备类型为SCSI类型，即允许ECS操作系统直接访问底层存储介质。支持SCSI锁命令。 * false表示云硬盘的设备类型为VBD (虚拟块存储设备 , Virtual Block Device)类型，即为默认类型，VBD只能支持简单的SCSI读写命令。 * 该字段不存在时，云硬盘默认为VBD类型。
+
+        :return: The hwpassthrough of this VolumeMetadata.
+        :rtype: str
+        """
+        return self._hwpassthrough
+
+    @hwpassthrough.setter
+    def hwpassthrough(self, hwpassthrough):
+        r"""Sets the hwpassthrough of this VolumeMetadata.
+
+        * true表示云硬盘的设备类型为SCSI类型，即允许ECS操作系统直接访问底层存储介质。支持SCSI锁命令。 * false表示云硬盘的设备类型为VBD (虚拟块存储设备 , Virtual Block Device)类型，即为默认类型，VBD只能支持简单的SCSI读写命令。 * 该字段不存在时，云硬盘默认为VBD类型。
+
+        :param hwpassthrough: The hwpassthrough of this VolumeMetadata.
+        :type hwpassthrough: str
+        """
+        self._hwpassthrough = hwpassthrough
+
+    @property
+    def order_id(self):
+        r"""Gets the order_id of this VolumeMetadata.
+
+        metadata中的表示云硬盘计费类型的字段。 当该字段有值时，表示该云硬盘的计费类型为包周期计费，否则计费类型为按需计费。
+
+        :return: The order_id of this VolumeMetadata.
+        :rtype: str
+        """
+        return self._order_id
+
+    @order_id.setter
+    def order_id(self, order_id):
+        r"""Sets the order_id of this VolumeMetadata.
+
+        metadata中的表示云硬盘计费类型的字段。 当该字段有值时，表示该云硬盘的计费类型为包周期计费，否则计费类型为按需计费。
+
+        :param order_id: The order_id of this VolumeMetadata.
+        :type order_id: str
+        """
+        self._order_id = order_id
+
+    def to_dict(self):
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, VolumeMetadata):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

@@ -1,0 +1,2 @@
+[console_scripts]
+prowler = prowler.__main__:prowler

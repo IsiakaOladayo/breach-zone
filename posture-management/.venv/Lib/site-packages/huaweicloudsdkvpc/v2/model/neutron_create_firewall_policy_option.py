@@ -1,0 +1,195 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class NeutronCreateFirewallPolicyOption:
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'audited': 'bool',
+        'description': 'str',
+        'firewall_rules': 'list[str]',
+        'name': 'str'
+    }
+
+    attribute_map = {
+        'audited': 'audited',
+        'description': 'description',
+        'firewall_rules': 'firewall_rules',
+        'name': 'name'
+    }
+
+    def __init__(self, audited=None, description=None, firewall_rules=None, name=None):
+        r"""NeutronCreateFirewallPolicyOption
+
+        The model defined in huaweicloud sdk
+
+        :param audited: 审计标记。
+        :type audited: bool
+        :param description: 功能说明：网络ACL防火墙策略描述 取值范围：最长255个字符
+        :type description: str
+        :param firewall_rules: 策略引用的网络ACL防火墙规则链。
+        :type firewall_rules: list[str]
+        :param name: 功能说明：网络ACL防火墙策略名称 取值范围：最长255个字符
+        :type name: str
+        """
+        
+        
+
+        self._audited = None
+        self._description = None
+        self._firewall_rules = None
+        self._name = None
+        self.discriminator = None
+
+        if audited is not None:
+            self.audited = audited
+        if description is not None:
+            self.description = description
+        if firewall_rules is not None:
+            self.firewall_rules = firewall_rules
+        if name is not None:
+            self.name = name
+
+    @property
+    def audited(self):
+        r"""Gets the audited of this NeutronCreateFirewallPolicyOption.
+
+        审计标记。
+
+        :return: The audited of this NeutronCreateFirewallPolicyOption.
+        :rtype: bool
+        """
+        return self._audited
+
+    @audited.setter
+    def audited(self, audited):
+        r"""Sets the audited of this NeutronCreateFirewallPolicyOption.
+
+        审计标记。
+
+        :param audited: The audited of this NeutronCreateFirewallPolicyOption.
+        :type audited: bool
+        """
+        self._audited = audited
+
+    @property
+    def description(self):
+        r"""Gets the description of this NeutronCreateFirewallPolicyOption.
+
+        功能说明：网络ACL防火墙策略描述 取值范围：最长255个字符
+
+        :return: The description of this NeutronCreateFirewallPolicyOption.
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        r"""Sets the description of this NeutronCreateFirewallPolicyOption.
+
+        功能说明：网络ACL防火墙策略描述 取值范围：最长255个字符
+
+        :param description: The description of this NeutronCreateFirewallPolicyOption.
+        :type description: str
+        """
+        self._description = description
+
+    @property
+    def firewall_rules(self):
+        r"""Gets the firewall_rules of this NeutronCreateFirewallPolicyOption.
+
+        策略引用的网络ACL防火墙规则链。
+
+        :return: The firewall_rules of this NeutronCreateFirewallPolicyOption.
+        :rtype: list[str]
+        """
+        return self._firewall_rules
+
+    @firewall_rules.setter
+    def firewall_rules(self, firewall_rules):
+        r"""Sets the firewall_rules of this NeutronCreateFirewallPolicyOption.
+
+        策略引用的网络ACL防火墙规则链。
+
+        :param firewall_rules: The firewall_rules of this NeutronCreateFirewallPolicyOption.
+        :type firewall_rules: list[str]
+        """
+        self._firewall_rules = firewall_rules
+
+    @property
+    def name(self):
+        r"""Gets the name of this NeutronCreateFirewallPolicyOption.
+
+        功能说明：网络ACL防火墙策略名称 取值范围：最长255个字符
+
+        :return: The name of this NeutronCreateFirewallPolicyOption.
+        :rtype: str
+        """
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        r"""Sets the name of this NeutronCreateFirewallPolicyOption.
+
+        功能说明：网络ACL防火墙策略名称 取值范围：最长255个字符
+
+        :param name: The name of this NeutronCreateFirewallPolicyOption.
+        :type name: str
+        """
+        self._name = name
+
+    def to_dict(self):
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, NeutronCreateFirewallPolicyOption):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

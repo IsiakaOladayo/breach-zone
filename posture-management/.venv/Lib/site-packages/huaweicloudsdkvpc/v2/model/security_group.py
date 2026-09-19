@@ -1,0 +1,250 @@
+# coding: utf-8
+
+from huaweicloudsdkcore.utils.http_utils import sanitize_for_serialization
+
+
+class SecurityGroup:
+
+    """
+    Attributes:
+      openapi_types (dict): The key is attribute name
+                            and the value is attribute type.
+      attribute_map (dict): The key is attribute name
+                            and the value is json key in definition.
+    """
+    sensitive_list = []
+
+    openapi_types = {
+        'name': 'str',
+        'description': 'str',
+        'id': 'str',
+        'vpc_id': 'str',
+        'enterprise_project_id': 'str',
+        'security_group_rules': 'list[SecurityGroupRule]'
+    }
+
+    attribute_map = {
+        'name': 'name',
+        'description': 'description',
+        'id': 'id',
+        'vpc_id': 'vpc_id',
+        'enterprise_project_id': 'enterprise_project_id',
+        'security_group_rules': 'security_group_rules'
+    }
+
+    def __init__(self, name=None, description=None, id=None, vpc_id=None, enterprise_project_id=None, security_group_rules=None):
+        r"""SecurityGroup
+
+        The model defined in huaweicloud sdk
+
+        :param name: 安全组名称
+        :type name: str
+        :param description: 安全组描述
+        :type description: str
+        :param id: 安全组唯一标识
+        :type id: str
+        :param vpc_id: 安全组所在的vpc的资源标识
+        :type vpc_id: str
+        :param enterprise_project_id: 功能说明：企业项目ID。 取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。
+        :type enterprise_project_id: str
+        :param security_group_rules: 安全组规则
+        :type security_group_rules: list[:class:`huaweicloudsdkvpc.v2.SecurityGroupRule`]
+        """
+        
+        
+
+        self._name = None
+        self._description = None
+        self._id = None
+        self._vpc_id = None
+        self._enterprise_project_id = None
+        self._security_group_rules = None
+        self.discriminator = None
+
+        self.name = name
+        if description is not None:
+            self.description = description
+        self.id = id
+        if vpc_id is not None:
+            self.vpc_id = vpc_id
+        if enterprise_project_id is not None:
+            self.enterprise_project_id = enterprise_project_id
+        self.security_group_rules = security_group_rules
+
+    @property
+    def name(self):
+        r"""Gets the name of this SecurityGroup.
+
+        安全组名称
+
+        :return: The name of this SecurityGroup.
+        :rtype: str
+        """
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        r"""Sets the name of this SecurityGroup.
+
+        安全组名称
+
+        :param name: The name of this SecurityGroup.
+        :type name: str
+        """
+        self._name = name
+
+    @property
+    def description(self):
+        r"""Gets the description of this SecurityGroup.
+
+        安全组描述
+
+        :return: The description of this SecurityGroup.
+        :rtype: str
+        """
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        r"""Sets the description of this SecurityGroup.
+
+        安全组描述
+
+        :param description: The description of this SecurityGroup.
+        :type description: str
+        """
+        self._description = description
+
+    @property
+    def id(self):
+        r"""Gets the id of this SecurityGroup.
+
+        安全组唯一标识
+
+        :return: The id of this SecurityGroup.
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        r"""Sets the id of this SecurityGroup.
+
+        安全组唯一标识
+
+        :param id: The id of this SecurityGroup.
+        :type id: str
+        """
+        self._id = id
+
+    @property
+    def vpc_id(self):
+        r"""Gets the vpc_id of this SecurityGroup.
+
+        安全组所在的vpc的资源标识
+
+        :return: The vpc_id of this SecurityGroup.
+        :rtype: str
+        """
+        return self._vpc_id
+
+    @vpc_id.setter
+    def vpc_id(self, vpc_id):
+        r"""Sets the vpc_id of this SecurityGroup.
+
+        安全组所在的vpc的资源标识
+
+        :param vpc_id: The vpc_id of this SecurityGroup.
+        :type vpc_id: str
+        """
+        self._vpc_id = vpc_id
+
+    @property
+    def enterprise_project_id(self):
+        r"""Gets the enterprise_project_id of this SecurityGroup.
+
+        功能说明：企业项目ID。 取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。
+
+        :return: The enterprise_project_id of this SecurityGroup.
+        :rtype: str
+        """
+        return self._enterprise_project_id
+
+    @enterprise_project_id.setter
+    def enterprise_project_id(self, enterprise_project_id):
+        r"""Sets the enterprise_project_id of this SecurityGroup.
+
+        功能说明：企业项目ID。 取值范围：最大长度36字节，带“-”连字符的UUID格式，或者是字符串“0”。“0”表示默认企业项目。
+
+        :param enterprise_project_id: The enterprise_project_id of this SecurityGroup.
+        :type enterprise_project_id: str
+        """
+        self._enterprise_project_id = enterprise_project_id
+
+    @property
+    def security_group_rules(self):
+        r"""Gets the security_group_rules of this SecurityGroup.
+
+        安全组规则
+
+        :return: The security_group_rules of this SecurityGroup.
+        :rtype: list[:class:`huaweicloudsdkvpc.v2.SecurityGroupRule`]
+        """
+        return self._security_group_rules
+
+    @security_group_rules.setter
+    def security_group_rules(self, security_group_rules):
+        r"""Sets the security_group_rules of this SecurityGroup.
+
+        安全组规则
+
+        :param security_group_rules: The security_group_rules of this SecurityGroup.
+        :type security_group_rules: list[:class:`huaweicloudsdkvpc.v2.SecurityGroupRule`]
+        """
+        self._security_group_rules = security_group_rules
+
+    def to_dict(self):
+        result = {}
+
+        for attr, _ in self.openapi_types.items():
+            value = getattr(self, attr)
+            if isinstance(value, list):
+                result[attr] = list(map(
+                    lambda x: x.to_dict() if hasattr(x, "to_dict") else x,
+                    value
+                ))
+            elif hasattr(value, "to_dict"):
+                result[attr] = value.to_dict()
+            elif isinstance(value, dict):
+                result[attr] = dict(map(
+                    lambda item: (item[0], item[1].to_dict())
+                    if hasattr(item[1], "to_dict") else item,
+                    value.items()
+                ))
+            else:
+                if attr in self.sensitive_list:
+                    result[attr] = "****"
+                else:
+                    result[attr] = value
+
+        return result
+
+    def to_str(self):
+        """Returns the string representation of the model"""
+        import simplejson as json
+        return json.dumps(sanitize_for_serialization(self), ensure_ascii=False)
+
+    def __repr__(self):
+        """For `print`"""
+        return self.to_str()
+
+    def __eq__(self, other):
+        """Returns true if both objects are equal"""
+        if not isinstance(other, SecurityGroup):
+            return False
+
+        return self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        """Returns true if both objects are not equal"""
+        return not self == other

@@ -1,0 +1,269 @@
+# coding: utf-8
+"""
+ Copyright 2020 Huawei Technologies Co.,Ltd.
+
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache LICENSE, Version 2.0 (the
+ "LICENSE"); you may not use this file except in compliance
+ with the LICENSE.  You may obtain a copy of the LICENSE at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the LICENSE is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the LICENSE for the
+ specific language governing permissions and limitations
+ under the LICENSE.
+"""
+
+
+class SdkException(Exception):
+    def __init__(self, error_msg):
+        """
+        The base exception class.
+        """
+        super().__init__()
+        self._error_msg = error_msg
+
+    @property
+    def error_msg(self):
+        return self._error_msg
+
+    @error_msg.setter
+    def error_msg(self, value):
+        self._error_msg = value
+
+    def __str__(self):
+        return "%s - %s" % (self.__class__.__name__, self.error_msg)
+
+
+class ConnectionException(SdkException):
+    def __init__(self, error_msg):
+        """
+        The base exception class of connection exceptions.
+        """
+        super().__init__(error_msg)
+
+
+class HostUnreachableException(ConnectionException):
+    def __init__(self, error_msg):
+        """
+        Host Unreachable Exception
+        """
+        super().__init__(error_msg)
+
+
+class SslHandShakeException(ConnectionException):
+    def __init__(self, error_msg):
+        """
+        Ssl HandShake Exception
+        """
+        super().__init__(error_msg)
+
+
+class ServiceResponseException(SdkException):
+    def __init__(self, status_code, sdk_error):
+        """
+        The base exception class of service response exceptions.
+        """
+        super().__init__(sdk_error.error_msg)
+        self._status_code = status_code
+        self._error_code = sdk_error.error_code
+        self._request_id = sdk_error.request_id
+        self._encoded_auth_msg = sdk_error.encoded_auth_msg
+
+    @property
+    def status_code(self):
+        return self._status_code
+
+    @status_code.setter
+    def status_code(self, value):
+        self._status_code = value
+
+    @property
+    def error_code(self):
+        return self._error_code
+
+    @error_code.setter
+    def error_code(self, value):
+        self._error_code = value
+
+    @property
+    def request_id(self):
+        return self._request_id
+
+    @request_id.setter
+    def request_id(self, value):
+        self._request_id = value
+
+    @property
+    def encoded_auth_msg(self):
+        return self._encoded_auth_msg
+
+    @encoded_auth_msg.setter
+    def encoded_auth_msg(self, value):
+        self._encoded_auth_msg = value
+
+    def __str__(self):
+        return "%s - {status_code:%s,request_id:%s,error_code:%s,error_msg:%s,encoded_authorization_message:%s }" % (
+            self.__class__.__name__, self.status_code, self.request_id, self.error_code, self.error_msg,
+            self.encoded_auth_msg)
+
+
+class ClientRequestException(ServiceResponseException):
+    def __init__(self, status_code, sdk_error):
+        """
+        Client Request Exception
+        """
+        super().__init__(status_code, sdk_error)
+
+
+class ServerResponseException(ServiceResponseException):
+    def __init__(self, status_code, sdk_error):
+        """
+        Server Response Exception
+        """
+        super().__init__(status_code, sdk_error)
+
+
+class RequestTimeoutException(SdkException):
+    def __init__(self, error_msg):
+        """
+        The base exception class of timeout exceptions.
+        """
+        super().__init__(error_msg)
+
+
+class CallTimeoutException(RequestTimeoutException):
+    def __init__(self, error_msg):
+        """
+        Call Timeout Exception
+        """
+        super().__init__(error_msg)
+
+
+class RetryOutageException(RequestTimeoutException):
+    def __init__(self, error_msg):
+        """
+        Retry Outage Exception
+        """
+        super().__init__(error_msg)
+
+
+class SdkError:
+    def __init__(self, request_id=None, error_code=None, error_msg=None, encoded_auth_msg=None):
+        self._error_msg = error_msg
+        self._error_code = error_code
+        self._request_id = request_id
+        self._encoded_auth_msg = encoded_auth_msg
+
+    @property
+    def error_msg(self):
+        return self._error_msg
+
+    @error_msg.setter
+    def error_msg(self, value):
+        self._error_msg = value
+
+    @property
+    def error_code(self):
+        return self._error_code
+
+    @error_code.setter
+    def error_code(self, value):
+        self._error_code = value
+
+    @property
+    def request_id(self):
+        return self._request_id
+
+    @request_id.setter
+    def request_id(self, value):
+        self._request_id = value
+
+    @property
+    def encoded_auth_msg(self):
+        return self._encoded_auth_msg
+
+    @encoded_auth_msg.setter
+    def encoded_auth_msg(self, value):
+        self._encoded_auth_msg = value
+
+
+def render_path(path_to_item):
+    """Returns a string representation of a path"""
+    result = ""
+    for pth in path_to_item:
+        if isinstance(pth, int):
+            result += "[{0}]".format(pth)
+        else:
+            result += "['{0}']".format(pth)
+    return result
+
+
+class ApiTypeError(TypeError):
+    def __init__(self, msg, path_to_item=None, valid_classes=None,
+                 key_type=None):
+        """ Raises an exception for TypeErrors
+
+        Args:
+            msg (str): the exception message
+
+        Keyword Args:
+            path_to_item (list): a list of keys an indices to get to the
+                                 current_item
+                                 None if unset
+            valid_classes (tuple): the primitive classes that current item
+                                   should be an instance of
+                                   None if unset
+            key_type (bool): False if our value is a value in a dict
+                             True if it is a key in a dict
+                             False if our item is an item in a list
+                             None if unset
+        """
+        self.path_to_item = path_to_item
+        self.valid_classes = valid_classes
+        self.key_type = key_type
+        full_msg = msg
+        if path_to_item:
+            full_msg = "%s at %s" % (msg, render_path(path_to_item))
+        super().__init__(full_msg)
+
+
+class ApiValueError(ValueError):
+    def __init__(self, msg, path_to_item=None):
+        """
+        Args:
+            msg (str): the exception message
+
+        Keyword Args:
+            path_to_item (list) the path to the exception in the
+                received_data dict. None if unset
+        """
+
+        self.path_to_item = path_to_item
+        full_msg = msg
+        if path_to_item:
+            full_msg = "%s at %s" % (msg, render_path(path_to_item))
+        super().__init__(full_msg)
+
+
+class ApiKeyError(KeyError):
+    def __init__(self, msg, path_to_item=None):
+        """
+        Args:
+            msg (str): the exception message
+
+        Keyword Args:
+            path_to_item (None/list) the path to the exception in the
+                received_data dict
+        """
+        self.path_to_item = path_to_item
+        full_msg = msg
+        if path_to_item:
+            full_msg = "%s at %s" % (msg, render_path(path_to_item))
+        super().__init__(full_msg)
