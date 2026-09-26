@@ -24,7 +24,7 @@ infra/breach-zone/main.tf.backup
 infra/breach-zone/.terraform.tfstate.lock.info
 
 docker-compose.override.yml
-posture-management/.venv/
+.venv/
 *.tfstate
 *.tfstate.backup
 .terraform/
