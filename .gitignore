@@ -1,5 +1,7 @@
 vaultcloud security project.md
+app/*vaultcloud security project.md
 credentials QLabs.json
+configs/aws-credentials-template.txt
 .aws_vaultcloud_breachzone_project_scope_vulnearability_management_plan.md
 
 vulnerability-management/before-after-tracking.md
@@ -9,11 +11,20 @@ vulnerability-management/results/scan-*.txt
 vulnerability-management/results/gate-*.txt
 vulnerability-management/results/secret-*.txt
 vulnerability-management/results/fs-*.txt
+vulnerability-management/results/ec2-trivy-*.json
+vulnerability-management/results/ec2-host-scan-baseline.txt
+vulnerability-management/results/ec2-scan-summary.json
+vulnerability-management/results/lynis-*.json
+vulnerability-management/results/lynis-*.txt
+vulnerability-management/results/trivy-rescan-raw.*
 
 
 infra/breach-zone/.terraform/*
+infra/breach-zone/main.tf.backup
+infra/breach-zone/.terraform.tfstate.lock.info
 
 docker-compose.override.yml
+posture-management/.venv/
 *.tfstate
 *.tfstate.backup
 .terraform/
