@@ -5,6 +5,21 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TRIVY_VERSION: v0.74.0
+  TRIVY_SEVERITY: CRITICAL,HIGH
+  TRIVY_IGNOREFILE: ./app/.trivyignore
 
 jobs:
   trivy-scan:
@@ -21,19 +36,96 @@ jobs:
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         with:
           image-ref: vaultcloud/api:${{ github.sha }}
-          severity: CRITICAL,HIGH
+          severity: ${{ env.TRIVY_SEVERITY }}
           exit-code: 1
-          trivyignores: ./app/.trivyignore
+          trivyignores: ${{ env.TRIVY_IGNOREFILE }}
           format: table
-          version: v0.74.0
+          version: ${{ env.TRIVY_VERSION }}
 
       - name: Trivy filesystem scan (app dependencies)
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         with:
           scan-type: fs
           scan-ref: ./app
-          severity: CRITICAL,HIGH
+          severity: ${{ env.TRIVY_SEVERITY }}
           exit-code: 1
-          trivyignores: ./app/.trivyignore
+          trivyignores: ${{ env.TRIVY_IGNOREFILE }}
           format: table
-          version: v0.74.0
+          version: ${{ env.TRIVY_VERSION }}
+
+      - name: Trivy secret scan (app)
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
+        with:
+          scan-type: fs
+          scan-ref: ./app
+          scanners: secret
+          exit-code: 1
+          format: table
+          version: ${{ env.TRIVY_VERSION }}
+
+  host-scan-runner:
+    name: Host Vulnerability Scan (runner)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: Install Lynis
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lynis
+
+      - name: Trivy rootfs scan
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
+        with:
+          scan-type: rootfs
+          scan-ref: /
+          severity: ${{ env.TRIVY_SEVERITY }}
+          exit-code: "0"
+          format: table
+          version: ${{ env.TRIVY_VERSION }}
+
+      - name: Lynis audit
+        run: |
+          sudo lynis audit system --quick --no-colors | tee lynis-runner.txt
+          sudo cp /var/db/lynis/lynis-report.dat ./lynis-report.dat
+          sudo chown "$(id -u):$(id -g)" ./lynis-report.dat
+          grep -a 'hardening_index' ./lynis-report.dat || true
+
+      - name: Upload host scan results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: host-scan-runner
+          path: |
+            lynis-runner.txt
+            lynis-report.dat
+          if-no-files-found: ignore
+
+  host-scan-ec2:
+    name: Host Vulnerability Scan (EC2)
+    runs-on: ubuntu-24.04
+    if: ${{ vars.AWS_SCANNER_ROLE_ARN != '' && (github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722  # v4.1.0
+        with:
+          role-to-assume: ${{ vars.AWS_SCANNER_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Run host scan
+        working-directory: vulnerability-management
+        env:
+          NONINTERACTIVE: "1"
+        run: ./ec2-host-scan.sh
+
+      - name: Upload host scan results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: host-scan-ec2
+          path: vulnerability-management/results/
+          if-no-files-found: ignore
