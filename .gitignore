@@ -3,10 +3,14 @@ app/*vaultcloud security project.md
 credentials QLabs.json
 configs/aws-credentials-template.txt
 .aws_vaultcloud_breachzone_project_scope_vulnearability_management_plan.md
+HANDOFF-database-issues.md
 
 vulnerability-management/before-after-tracking.md
 vulnerability-management/container-scan-baseline.txt
 vulnerability-management/deliverable4.sh
+vulnerability-management/deliverable4-ec2-evidence.md
+vulnerability-management/ec2-host-scan.sh
+vulnerability-management/ec2-scan-report.html
 vulnerability-management/results/scan-*.txt
 vulnerability-management/results/gate-*.txt
 vulnerability-management/results/secret-*.txt
@@ -17,6 +21,10 @@ vulnerability-management/results/ec2-scan-summary.json
 vulnerability-management/results/lynis-*.json
 vulnerability-management/results/lynis-*.txt
 vulnerability-management/results/trivy-rescan-raw.*
+
+# scan evidence kept in the repo (exceptions to the result ignore rules above)
+!vulnerability-management/results/ec2-trivy-snapshot.json
+!vulnerability-management/results/lynis-live.json
 
 
 infra/breach-zone/.terraform/*
