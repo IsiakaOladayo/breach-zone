@@ -25,6 +25,8 @@ vulnerability-management/results/trivy-rescan-raw.*
 # scan evidence kept in the repo (exceptions to the result ignore rules above)
 !vulnerability-management/results/ec2-trivy-snapshot.json
 !vulnerability-management/results/lynis-live.json
+!vulnerability-management/results/trivy-rescan-raw.txt
+!vulnerability-management/results/lynis-snapshot-baseline.txt
 
 
 infra/breach-zone/.terraform/*
