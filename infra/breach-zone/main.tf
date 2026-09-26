@@ -202,7 +202,7 @@ resource "aws_db_instance" "main" {
   publicly_accessible        = true # needed for developer access
   skip_final_snapshot        = true
   deletion_protection        = false
-  backup_retention_period    = 0     # backups disabled — "costs money"
+  backup_retention_period    = 0     # backups disabled
   storage_encrypted          = false # encryption "caused slowness"
   multi_az                   = false
   auto_minor_version_upgrade = false
