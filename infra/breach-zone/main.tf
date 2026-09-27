@@ -92,7 +92,7 @@ resource "aws_security_group" "app_sg" {
   tags = { Name = "vaultcloud-app-sg" }
 }
 
-# same SG for the database — "simpler to manage"
+# Same SG for the database — "simpler to manage"
 resource "aws_security_group" "db_sg" {
   name   = "vaultcloud-db-sg"
   vpc_id = aws_vpc.main.id
@@ -113,28 +113,65 @@ resource "aws_security_group" "db_sg" {
 }
 
 # ── COMPUTE ──────────────────────────────────────────────────────────
+# Create a Trust Policy allowing EC2 to assume this role
+data "aws_iam_policy_document" "ec2_trust_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+# Create the IAM Role
+resource "aws_iam_role" "ec2_s3_role" {
+  name               = "ec2-s3-access-role"
+  assume_role_policy = data.aws_iam_policy_document.ec2_trust_policy.json
+}
+
+# Define S3 Permissions
+resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
+  role       = aws_iam_role.ec2_s3_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
+
+# Create the IAM Instance Profile
+resource "aws_iam_instance_profile" "ec2_s3_profile" {
+  name = "ec2-s3-instance-profile"
+  role = aws_iam_role.ec2_s3_role.name
+}
 
 resource "aws_instance" "app_server" {
   ami                    = "ami-0e3a96b0b22670c57" # amazon linux 2
   instance_type          = "t2.micro"
+# Attach the IAM Instance Profile here
+  iam_instance_profile = aws_iam_instance_profile.ec2_s3_profile.name
   subnet_id              = aws_subnet.public_a.id
   vpc_security_group_ids = [aws_security_group.app_sg.id]
-  # no key pair — we use SSM for access (when it works)
+  # no key pair — we use SSM for access (It works now)
 
   # user_data installs docker and starts the app
   user_data = <<-EOF
     #!/bin/bash
+    # 1. Update and explicitly configure the SSM Agent
     yum update -y
-    amazon-linux-extras install docker -y
+    yum install -y amazon-ssm-agent
+    systemctl enable amazon-ssm-agent
+    systemctl start amazon-ssm-agent
+
+    # 2. Install and configure Docker
+    amazon-linux-extras install docker -y || yum install -y docker
     service docker start
     usermod -a -G docker ec2-user
-    # pull and run the app
+
+    # 3. Pull and run the application container
     docker run -d -p 5000:5000 \
       -e SECRET_KEY=vaultcloud-secret-2024 \
       -e ADMIN_TOKEN=vc-admin-token-do-not-share \
-      -e AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
-      -e AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
       vaultcloud/api:latest
+
   EOF
 
   tags = {
